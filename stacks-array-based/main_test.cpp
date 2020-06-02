@@ -61,7 +61,7 @@ int main()
     std::cout << "copying the stack" << std::endl;
     Stack<int> s_copy;
     s.copy(s_copy);
-    s.traverse(& print_fn);
+    s_copy.traverse(& print_fn);
     std::cout<< std::endl;
 
     return 0;
