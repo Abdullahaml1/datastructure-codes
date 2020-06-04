@@ -34,5 +34,5 @@ run:
 	./$(EXC)
 
 
-build-run:build run
+build-run: build run
 
