@@ -1,1 +1,1 @@
-((c++-mode (helm-make-build-dir ."stacks-array-based")))
+((c++-mode (helm-make-build-dir ."stack-array-based")))
