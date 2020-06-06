@@ -13,6 +13,7 @@ public:
     T element;
 
     StackNode<T> * next;
+    StackNode<T> * prev;
 };
 
 
@@ -49,6 +50,12 @@ public:
 
 
     /**
+     * [pushes an element at the end of the stack]
+     */
+    void push_back(T);
+
+
+    /**
      * [pops an element form the stack]
      */
     void pop(T & value);
@@ -56,9 +63,24 @@ public:
 
 
     /**
+     * [pops an element form the end of the stack]
+     */
+    void pop_back(T & value);
+    void pop_back();
+
+
+
+    /**
      * [hand the top element of stack without affecting int]
      */
     void top(T & value);
+
+
+    /**
+     * [hand the top element of the end of stack without affecting it]
+     */
+    void top_back(T & value);
+
 
 
     /**
@@ -113,10 +135,10 @@ private:
     StackNode<T> * stack_ptr;
 
 
-
-
-
-
+    //--------------------------------------------------------------------------
+    // points the last element of the stack
+    //--------------------------------------------------------------------------
+    StackNode<T> * stack_last_ptr;
 
 
 
