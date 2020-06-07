@@ -71,7 +71,7 @@ public:
 
 
     /**
-     * [hand the top element of stack without affecting int]
+     * [hand the top element of stack without affecting it]
      */
     void top(T & value);
 
@@ -92,7 +92,7 @@ public:
     /**
      * [copies the stack to another one]
      */
-    void copy(Stack & clonned){};
+    void copy(Stack & clonned);
 
 
     /*
@@ -122,7 +122,21 @@ public:
        // do some thing with index, and element
      }]
      */
-  void traverse(void (*fn)(size_t index, T  element));
+    void traverse(void (*fn)(size_t index, T  element));
+
+
+    /**
+     * [a ways to acess all the elements in the stack wih reverse order
+     * (acessing the last element of the stack first)].
+     * @param [the input function will be at this form:
+     *
+     * void fun(uint32 index, int element)
+     {
+     // do some thing with index, and element
+     }]
+    */
+    void traverse_backward(void (*fn)(size_t index, T  element));
+
 
 
 

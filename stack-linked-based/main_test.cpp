@@ -52,17 +52,89 @@ int main()
     s.traverse(& print_fn);
     std::cout<< std::endl;
 
+    if (!s.isEmpty())
+      s.pop(x);
+    std::cout << "pop(x), x = " << x << std::endl;
+    s.traverse(& print_fn);
+    std::cout << "stack size = " << s.size() << std::endl;;
+    std::cout<< std::endl;
+
+
+    std::cout << "push_back(200)" << std::endl;
+    if (!s.isFull())
+        s.push_back(200);
+    s.traverse(& print_fn);
+    std::cout<< std::endl;
+
+    if (!s.isEmpty())
+        s.pop(x);
+    std::cout << "pop(x), x = " << x << std::endl;
+    s.traverse(& print_fn);
+    std::cout << "stack size = " << s.size() << std::endl;;
+    std::cout<< std::endl;
+
+    std::cout << "push(200)" << std::endl;
+    if (!s.isFull())
+        s.push(200);
+    s.traverse(& print_fn);
+    std::cout<< std::endl;
+
+    if (!s.isEmpty())
+        s.pop_back(x);
+    std::cout << "pop_back(x), x = " << x << std::endl;
+    s.traverse(& print_fn);
+    std::cout << "stack size = " << s.size() << std::endl;;
+    std::cout<< std::endl;
+
     std::cout << "Inserting elements in the stack form 1 to 10" << std::endl;
     for (int i = 1; i <= 10; i++)
         s.push(i);
     s.traverse(& print_fn);
     std::cout<< std::endl;
 
-    // std::cout << "copying the stack" << std::endl;
-    // Stack<int> s_copy;
-    // s.copy(s_copy);
-    // s_copy.traverse(& print_fn);
-    // std::cout<< std::endl;
+    if (!s.isEmpty())
+        s.pop_back(x);
+    std::cout << "pop_back(x), x = " << x << std::endl;
+    s.traverse(& print_fn);
+    std::cout << "stack size = " << s.size() << std::endl;;
+    std::cout<< std::endl;
+
+    if (!s.isEmpty())
+        s.pop(x);
+    std::cout << "pop(x), x = " << x << std::endl;
+    s.traverse(& print_fn);
+    std::cout << "stack size = " << s.size() << std::endl;;
+    std::cout<< std::endl;
+
+    std::cout << "push_back(400)" << std::endl;
+    if (!s.isFull())
+        s.push_back(400);
+    s.traverse(& print_fn);
+    std::cout<< std::endl;
+
+
+    std::cout << "push_back(990)" << std::endl;
+    if (!s.isFull())
+        s.push_back(990);
+    s.traverse(& print_fn);
+    std::cout<< std::endl;
+
+    std::cout << "copying the stack" << std::endl;
+    Stack<int> s_copy;
+    s.copy(s_copy);
+    s_copy.traverse(& print_fn);
+    std::cout << std::endl;
+
+    std::cout <<"looping the element backwards" << std::endl;
+    s_copy.traverse_backward(& print_fn);
+    std::cout<< std::endl;
+
+    Stack<int64_t> s_long;
+    std::cout << "Stress testing with 128000000 element" << std::endl;
+    for(int i = 0;i <= 128000000; i++)
+        s_long.push(i);
+    s_long.clean();
+
 
     return 0;
 }
