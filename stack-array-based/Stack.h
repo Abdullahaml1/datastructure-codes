@@ -4,7 +4,7 @@
 
 
 #include <stdint.h>
-#define MAX_STACK 1000
+#define MAX_STACK 500000
 
 
 

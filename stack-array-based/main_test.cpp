@@ -64,5 +64,12 @@ int main()
   s_copy.traverse(& print_fn);
   std::cout<< std::endl;
 
+
+  Stack<int64_t> s_long;
+  std::cout << "Stress testing with " << MAX_STACK << " element" << std::endl;
+  for(int64_t i = 0;i < MAX_STACK; i++)
+      s_long.push(i);
+  s_long.clean();
+
   return 0;
 }
