@@ -36,6 +36,25 @@ public:
   Tr eval(Ti x);
 
 
+
+  // overlaodded operators >, <, ==
+
+  bool operator >(Operator* x)
+  {
+    return (this->periority) > (x-> periority) ;
+  }
+
+  bool operator <(Operator* x)
+  {
+    return (this->periority) < (x-> periority) ;
+  }
+
+  bool operator ==(Operator* x)
+  {
+    return (this->periority) == (x-> periority) ;
+  }
+
+
   //----------------------------------------------------------------------------
   // variabe attribute
   //----------------------------------------------------------------------------

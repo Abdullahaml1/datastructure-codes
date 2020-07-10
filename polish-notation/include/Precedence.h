@@ -123,8 +123,46 @@ public:
 
 
 
+  /*
+   * [gets the >>>>first<<<< operator object of the vector that have the same
+   * name]
+   * @return [a pointer to the operator, NULL if not found]
+   */
 
 
+  Operator * getOperator(std::string name)
+  {
+    return getOperator(_operators_vec, name);
+  }
+
+
+  Operator * getOperator(std::vector<Operator*> & vec, std::string name)
+  {
+    auto is_operator = [name=name](Operator * oper_ptr){
+                         return oper_ptr->name == name;};
+
+    std::vector<Operator *>::iterator itr;
+    itr = std::find_if(vec.begin(), vec.end(), is_operator);
+
+    // if not found
+    if (itr == vec.end())
+      return NULL;
+
+    return *itr; // return pointer to the operator
+  }
+
+
+
+
+
+
+
+  /*
+   * [checks if an operator exists or not with two parametes:
+   * its name, and type]
+   * @return [true: if it was found, false if it is not found]
+   *
+   */
 
   bool findOperator(std::string name, OperatorType type)
   {
@@ -146,6 +184,36 @@ public:
       return false;
 
     return true;
+  }
+
+
+
+  /*
+   * [checks if the operator name is used single time in the operatos vector]
+   * @return [true: if the operator name is used single time,
+   *          false: otherwise (operator name does not exist, or used more than
+   *          one time) ]
+   */
+  bool singleUsedOperator(std::vector<Operator*> vec, std::string name)
+  {
+
+    int count = 0;
+    for(std::vector<Operator*>::iterator itr=vec.begin(); itr!=vec.end(); ++itr)
+      {
+        if ((*itr)->name == name)
+          count++;
+
+        if (count == 2) //more than one operator has the same name
+          return false;
+      }
+
+    if (count == 1)
+      {
+        return true;
+      }
+
+    return false; // the name of the operator does not exists (not logical as we
+                 //checked before this statge)
   }
 
 

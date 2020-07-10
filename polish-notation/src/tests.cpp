@@ -7,12 +7,12 @@
 
 #include "PolishConverter.h"
 
-#define LOOP
+// #define LOOP
 // #define IS_DIGIT
 // #define REMOVE_SPACES
 // #define GET_MAP_VALUE
 // #define IN_OPERATOR
-#define PARSE_EXP
+// #define PARSE_EXP
 
 
 
