@@ -1,5 +1,5 @@
-#ifndef PRENCEDECE_H
-#define PRENCEDECE_H
+#ifndef OPERATOR_POOL_H
+#define OPERATOR_POOL_H
 
 #include <stdint.h>
 #include <vector>
@@ -7,23 +7,49 @@
 
 #include "Operator.h"
 
-class Precedence
+class OperatorPool
 {
 public:
 
-  Precedence(){};
+  OperatorPool(){};
 
-  ~Precedence(){};
+  ~OperatorPool(){};
 
   /*
-   * [load Precedence]
+   * [load OperatorPool]
    * @return [if it is not exists will return true, and false if it exists]
    */
-  bool append(Operator * oper_ptr)
+
+  bool append(OperatorInfix* oper_ptr)
   {
-    if (!findOperator(oper_ptr->name, oper_ptr->type))
+    return append(oper_ptr, _infix_vec_pool);
+  };
+
+
+  bool append(OperatorPostfix* oper_ptr)
+  {
+    return append(oper_ptr, _postfix_vec_pool);
+  };
+
+
+  bool append(OperatorPrefix* oper_ptr)
+  {
+    return append(oper_ptr, _prefix_vec_pool);
+  };
+
+
+  bool append(OperatorBraces* oper_ptr)
+  {
+    return append(oper_ptr, _braces_vec_pool);
+  };
+
+
+  template <class O>
+  bool append(O * oper_ptr, std::vector<O*> & vec)
+  {
+    if (!findOperator(oper_ptr->get_name(), oper_ptr->type))
       {
-        _operators_vec.push_back(oper_ptr);
+        vec.push_back(oper_ptr);
 
         return true;
       }
@@ -47,7 +73,7 @@ public:
    */
   bool isOperator(std::string name)
   {
-    auto oper_cond = [name=name](Operator* oper){return oper->name == name;};
+    auto oper_cond =[name=name](Operator* oper){return oper->check_name(name);};
 
     auto itr = std::find_if(_operators_vec.begin(), _operators_vec.end(),
                             oper_cond);
@@ -70,7 +96,7 @@ public:
   {
     // lambda for finding the char in the key
     auto find_c = [c=c](Operator* oper){
-                    return (oper->name.find(c) != std::string::npos);};
+                    return (oper->in_name(c));};
 
 
     auto itr=std::find_if(_operators_vec.begin(), _operators_vec.end(),find_c);
@@ -93,25 +119,47 @@ public:
   // Helper methos
   //----------------------------------------------------------------------------
 
+
   /*
    * [gets an operator object of the vector]
    * @return [a pointer to the operator, NULL if not found]
    */
 
 
-  Operator * getOperator(std::string name, OperatorType type)
+  // TODO >>>>>>>>><<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+  OperatorInfix * getOperator(std::string name, OperatorType type)
   {
-    return getOperator(_operators_vec, name, type);
-  }
+    return getOperator(_infix_vec_pool, name, type);
+  };
 
 
-  Operator * getOperator(std::vector<Operator*> & vec,
-                         std::string name, OperatorType type)
+  OperatorPostfix * getOperator(std::string name, OperatorType type)
   {
-    auto is_operator = [name=name, type=type](Operator * oper){
-                         return (oper->name == name) && (oper->type == type);};
+    return getOperator(_postfix_vec_pool, name, type);
+  };
 
-    std::vector<Operator *>::iterator itr;
+
+  OperatorPrefix * getOperator(std::string name, OperatorType type)
+  {
+    return getOperator(_prefix_vec_pool, name, type);
+  };
+
+
+  OperatorBraces * getOperator(std::string name, OperatorType type)
+  {
+    return getOperator(_braces_vec_pool, name, type);
+  };
+
+
+  template <class O>
+  O * getOperator(std::vector<O *> & vec,
+                  std::string name, OperatorType type)
+  {
+    auto is_operator = [name=name, type=type](O * oper){
+                         return (oper->check_name(name)) && (oper->type == type);};
+
+    std::vector<O *>::iterator itr;
     itr = std::find_if(vec.begin(), vec.end(), is_operator);
 
     // if not found
@@ -121,7 +169,7 @@ public:
     return *itr; // return pointer to the operator
   }
 
-
+  // TODO >>>>>>>>><<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
   /*
    * [gets the >>>>first<<<< operator object of the vector that have the same
@@ -136,12 +184,13 @@ public:
   }
 
 
-  Operator * getOperator(std::vector<Operator*> & vec, std::string name)
+  template <class O>
+  O * getOperator(std::vector<O *> & vec, std::string name)
   {
-    auto is_operator = [name=name](Operator * oper_ptr){
-                         return oper_ptr->name == name;};
+    auto is_operator = [name=name](O * oper_ptr){
+                         return oper_ptr->check_name(name); };
 
-    std::vector<Operator *>::iterator itr;
+    std::vector<O *>::iterator itr;
     itr = std::find_if(vec.begin(), vec.end(), is_operator);
 
     // if not found
@@ -166,17 +215,38 @@ public:
 
   bool findOperator(std::string name, OperatorType type)
   {
-    return findOperator(_operators_vec, name, type);
+    switch(type)
+      {
+      case OperatorType::infix:
+        return findOperator(_infix_vec_pool, name, type);
+        break;
+
+      case OperatorType::single_postfix:
+        return findOperator(_postfix_vec_pool, name, type);
+        break;
+
+
+      case OperatorType::single_prefix:
+        return findOperator(_prefix_vec_pool, name, type);
+        break;
+
+
+      case OperatorType::braces:
+        return findOperator(_braces_vec_pool, name, type);
+        break;
+      }
+    // return findOperator(_operators_vec, name, type);
   }
 
 
-  bool findOperator(std::vector<Operator*> & vec,
+  template <class O>
+  bool findOperator(std::vector<O *> & vec,
                    std::string name, OperatorType type)
   {
-    auto is_operator = [name=name, type=type](Operator * oper){
-                         return (oper->name == name) && (oper->type == type);};
+    auto is_operator = [name=name, type=type](O * oper){
+                         return (oper->check_name(name)) && (oper->type == type);};
 
-    std::vector<Operator *>::iterator itr;
+    std::vector<O *>::iterator itr;
     itr = std::find_if(vec.begin(), vec.end(), is_operator);
 
     // if not found
@@ -200,7 +270,7 @@ public:
     int count = 0;
     for(std::vector<Operator*>::iterator itr=vec.begin(); itr!=vec.end(); ++itr)
       {
-        if ((*itr)->name == name)
+        if ((*itr)->check_name(name))
           count++;
 
         if (count == 2) //more than one operator has the same name
@@ -224,7 +294,10 @@ private:
   //----------------------------------------------------------------------------
   // map for storing the precedent in the operations
   //----------------------------------------------------------------------------
-  std::vector <Operator*> _operators_vec;
+  std::vector <OperatorInfix*> _infix_vec_pool;
+  std::vector <OperatorPrefix*> _prefix_vec_pool;
+  std::vector <OperatorPostfix*> _postfix_vec_pool;
+  std::vector <OperatorBraces*> _braces_vec_pool;
 };
 
 

@@ -6,7 +6,7 @@
 
 
 
-enum class OperatorType {infix, single_postfix, single_prefix};
+enum class OperatorType {infix, single_postfix, single_prefix, braces};
 
 
 
@@ -24,18 +24,29 @@ public:
   };
 
 
+
   ~Operator(){};
 
 
 
-  template <typename Tr, typename Ti>
-  Tr eval(Ti x, Ti y);
+  virtual std::string get_name()
+  {
+    return name;
+  };
+
+  virtual bool check_name(std::string str)
+  {
+
+    return name==str;
+  };
 
 
-  template <typename Tr, typename Ti>
-  Tr eval(Ti x);
+  template <class T>
+  bool in_name(T & c)
+  {
 
-
+    return name.find(c)!=std::string::npos;
+  }
 
   // overlaodded operators >, <, ==
 
@@ -58,15 +69,25 @@ public:
   //----------------------------------------------------------------------------
   // variabe attribute
   //----------------------------------------------------------------------------
-  std::string name;
+
+
+
   int periority;
   OperatorType type;
+
+
+protected:
+
+  std::string name; // for single sympol operator aka(not braces)
 
 
 
 };
 
 
+//------------------------------------------------------------------------------
+// operator classes
+//------------------------------------------------------------------------------
 
 template <typename Tr, typename Ti>
 class OperatorInfix : public Operator
@@ -88,6 +109,10 @@ public:
   }
 
 };
+
+
+
+
 
 
 template <typename Tr, typename Ti>
@@ -116,6 +141,9 @@ public:
 
 
 
+
+
+
 template <typename Tr, typename Ti>
 class OperatorPrefix : public Operator
 {
@@ -135,6 +163,29 @@ public:
     return static_cast<Tr>(func(x));
   }
 
+};
+
+
+
+
+
+
+
+class OperatorBraces : public Operator
+{
+public:
+
+  OperatorBraces(std::string _s_name, std::string _e_name, int _per):
+    Operator(_s_name+_e_name, _per, OperatorType::braces)
+  {
+  };
+
+
+private:
+
+
+  std::string s_name; // the start of the braces
+  std::string e_name; // the end of the braces
 };
 
 #endif /*OPERATOR_H*/
