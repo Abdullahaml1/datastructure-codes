@@ -5,8 +5,9 @@
 #include <signal.h>
 #include <unistd.h>
 #include <memory>
+#include <functional>
 
-#include "PolishConverter.h"
+// #include "PolishConverter.h"
 
 // #define LOOP
 // #define IS_DIGIT
@@ -29,7 +30,14 @@ void my_handler(int s){
 class A
 {
 public:
-  A(int _x):x(_x){};
+
+    template <class lam>
+  A(int _x, lam exp):x(_x)
+    {
+        addf = exp;
+        addi = exp;
+        p = exp;
+    };
 
   virtual void print()
   {
@@ -37,11 +45,11 @@ public:
   };
 
 
-  template <class T>
-  virtual void haha(T y)
-  {
-    std::cout << "A: "<< y << std::endl;
-  };
+  std::function<int(int, int)> addi;
+  std::function<float(float, float)> addf;
+  int (*p)(int, int);
+
+
 
   int x;
 };
@@ -49,17 +57,26 @@ public:
 class B : public A
 {
 public:
-  B(int _x):A(_x * 100){};
+
+
+    template <class lam>
+  B(int _x, lam exp):A(_x , exp){};
+
+
   void print() override
   {
     std::cout << "B: " << x << std::endl;
+    std::cout << "Lambda int: " << addi(x, 88) << " Lambda float: " << addf((int)11, 44.44) << std::endl; 
+    std::cout << "pinter to function: " << p(x, 99) << std::endl;
   };
 
-  template <class T>
-  void haha(T y)
+
+  void add99(int & y)
   {
-    std::cout << "hahahah; " << y << std::endl;
+      std::cout << "adding 99" << std::endl;
+      y+=99;
   };
+
 
 
 };
@@ -75,17 +92,16 @@ int main()
   signal (SIGINT,my_handler);
 
 
-  PolishConverter pol;
+  // PolishConverter pol;
 
 
 #ifdef TEST_INHARITANCE
   // solution for polymorphic pointers: https://stackoverflow.com/questions/32759556/task-list-in-c-vector-with-more-than-one-type
   // much simpler solution to mark methods of the parent class as virtual https://stackoverflow.com/questions/47186497/polymorphic-pointer
   std::vector<A* > vec;
-  vec.push_back(new B(10));
+  vec.push_back(new B(10, [](auto x, auto y){return x+y;}) );
   A* cp = vec.back();
   cp -> print();
-  cp -> haha(5);
 
 
 
