@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
+#include <memory>
 
 #include "PolishConverter.h"
 
@@ -13,6 +14,7 @@
 // #define GET_MAP_VALUE
 // #define IN_OPERATOR
 // #define PARSE_EXP
+#define TEST_INHARITANCE
 
 
 
@@ -23,6 +25,50 @@ void my_handler(int s){
 }
 
 
+#ifdef TEST_INHARITANCE
+class A
+{
+public:
+  A(int _x):x(_x){};
+
+  virtual void print()
+  {
+    std::cout << "A: "<< x << std::endl;
+  };
+
+
+  template <class T>
+  virtual void haha(T y)
+  {
+    std::cout << "A: "<< y << std::endl;
+  };
+
+  int x;
+};
+
+class B : public A
+{
+public:
+  B(int _x):A(_x * 100){};
+  void print() override
+  {
+    std::cout << "B: " << x << std::endl;
+  };
+
+  template <class T>
+  void haha(T y)
+  {
+    std::cout << "hahahah; " << y << std::endl;
+  };
+
+
+};
+
+
+
+#endif
+
+
 
 int main()
 {
@@ -31,6 +77,24 @@ int main()
 
   PolishConverter pol;
 
+
+#ifdef TEST_INHARITANCE
+  // solution for polymorphic pointers: https://stackoverflow.com/questions/32759556/task-list-in-c-vector-with-more-than-one-type
+  // much simpler solution to mark methods of the parent class as virtual https://stackoverflow.com/questions/47186497/polymorphic-pointer
+  std::vector<A* > vec;
+  vec.push_back(new B(10));
+  A* cp = vec.back();
+  cp -> print();
+  cp -> haha(5);
+
+
+
+  // vec.push_back(new A(10));
+  // cp = vec.back();
+  // cp -> print();
+
+
+#endif
 
 
 #ifdef GET_MAP_VALUE

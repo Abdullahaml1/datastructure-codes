@@ -4,6 +4,7 @@ GXX := g++
 # flags
 FLG := -Wall -Wshadow -Wconversion
 FLG += -g
+# FLG += -std=c++17
 
 
 #source file
