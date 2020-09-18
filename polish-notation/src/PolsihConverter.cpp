@@ -51,7 +51,7 @@ void PolishConverter::parseExp(std::string            & exp,
       indcies.push_back(last_i);
       types.push_back(Parameter::oprand);
     }
-  else if (prec_obj.isInOperator(exp[last_i]))
+  else if (operp.isInOperator(exp[last_i]))
     {
       indcies.push_back(last_i);
       types.push_back(Parameter::operate);
@@ -59,27 +59,28 @@ void PolishConverter::parseExp(std::string            & exp,
   else
     {
       // raise exepression invalid operantor
+      invalid_arguemt_excep(exp[last_i]);
     }
 
 
   for (size_t i = 1; i < exp.size(); i++ )
     {
-      if (isDigit(exp[last_i]) && prec_obj.isInOperator(exp[i]))
+      if (isDigit(exp[last_i]) && operp.isInOperator(exp[i]))
         {
           indcies.push_back(i);
           types.push_back(Parameter::operate);
         }
 
-      else if (prec_obj.isInOperator(exp[last_i]) && isDigit(exp[i]))
+      else if (operp.isInOperator(exp[last_i]) && isDigit(exp[i]))
         {
           size_t start_index = indcies.back();
           // the string excludgin the last char (i)
           std::string sym = std::string(exp, start_index, i - start_index);
 
           // for operator of more than one char
-          if(prec_obj.isOperator(sym))
+          if(operp.isOperator(sym))
             {
-              indcies.push_back(i);
+              indcies.push_back(i); //start of a digit
             }
 
           else
@@ -93,13 +94,13 @@ void PolishConverter::parseExp(std::string            & exp,
         }
 
       // for operantor more than one char
-      else if (prec_obj.isInOperator(exp[last_i]) && prec_obj.isInOperator(exp[i]))
+      else if (operp.isInOperator(exp[last_i]) && operp.isInOperator(exp[i]))
         {
           size_t start_index = indcies.back();
           std::string sym = std::string(exp, start_index, i - start_index + 1);
           std::string sym_1 = std::string(exp, start_index, i - start_index );
 
-          if(!prec_obj.isInOperator(sym)  && prec_obj.isOperator(sym_1))
+          if(!operp.isInOperator(sym)  && operp.isOperator(sym_1))
             {
               indcies.push_back(i);
               // the next item is an operator
@@ -108,7 +109,7 @@ void PolishConverter::parseExp(std::string            & exp,
         }
 
 
-      else if (!isDigit(exp[i]) && !prec_obj.isInOperator(exp[i]))
+      else if (!isDigit(exp[i]) && !operp.isInOperator(exp[i]))
         {
           // raise exepession invaild operator
           invalid_arguemt_excep(exp[i]);
@@ -123,7 +124,7 @@ void PolishConverter::parseExp(std::string            & exp,
   else
     temp = std::string(exp, indcies.back());
 
-  if (!prec_obj.isOperator(temp) && !isDigit(exp.back()))
+  if (!operp.isOperator(temp) && !isDigit(exp.back()))
 
     {
       // raise excepssion invalid sympol
@@ -134,6 +135,21 @@ void PolishConverter::parseExp(std::string            & exp,
   indcies.push_back(exp.size());
 }
 
+
+
+
+
+
+void PolishConverter::parseBraces(std::string            & exp,
+                                  std::vector<size_t>    & braces_indcies)
+{
+  Stack<OperatorBraces*> braces_pool;
+};
+
+    
+  
+  
+  
 
 
 

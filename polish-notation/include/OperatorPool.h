@@ -7,6 +7,17 @@
 
 #include "Operator.h"
 
+struct Pos
+{
+public:
+  Pos(int _index, OperatorType _type):index(_index), type(_type){};
+
+  int index;
+  OperatorType type;
+};
+
+
+
 class OperatorPool
 {
 public:
@@ -20,12 +31,15 @@ public:
    * @return [if it is not exists will return true, and false if it exists]
    */
 
+
+  template <typename Tr, typename Ti>
   bool append(OperatorInfix* oper_ptr)
   {
     return append(oper_ptr, _infix_vec_pool);
   };
 
 
+  template <typename Tr, typename Ti>
   bool append(OperatorPostfix* oper_ptr)
   {
     return append(oper_ptr, _postfix_vec_pool);
@@ -61,10 +75,10 @@ public:
   /*
    * [gets the prencedent value of the structure]
    */
-  int getPrecedence(std::string name, OperatorType type)
-  {
-    return getOperator(name, type) -> periority;
-  };
+  // int getPrecedence(std::string name, OperatorType type)
+  // {
+  //   return getOperator(name, type) -> periority;
+  // };
 
 
 
@@ -75,18 +89,27 @@ public:
   {
     auto oper_cond =[name=name](Operator* oper){return oper->check_name(name);};
 
-    auto itr = std::find_if(_operators_vec.begin(), _operators_vec.end(),
-                            oper_cond);
+    if (check_cond(_infix_vec_pool, oper_cond))
+      return true;
+
+    else if(check_cond(_postfix_vec_pool, oper_cond))
+      return true;
+        
+    else if(check_cond(_prefix_vec_pool, oper_cond))
+      return true;
+
+    else if(check_cond(_braces_vec_pool, oper_cond))
+      return true;
 
 
-    // if the operator name not found
-    if (itr == _operators_vec.end())
-      {
-        return false;
-      }
 
-    return true;
-  };
+    return false;
+
+
+    };
+
+
+
 
   /**
    * [checks if a string or char in a listed operator or not]
@@ -99,13 +122,18 @@ public:
                     return (oper->in_name(c));};
 
 
-    auto itr=std::find_if(_operators_vec.begin(), _operators_vec.end(),find_c);
+    if (check_cond(_infix_vec_pool, find_c))
+      return true;
 
-    //if the operator object not found
-    if (itr == _operators_vec.end())
-      {
-        return false;
-      }
+    else if(check_cond(_postfix_vec_pool, find_c))
+      return true;
+        
+    else if(check_cond(_prefix_vec_pool, find_c))
+      return true;
+
+    else if(check_cond(_braces_vec_pool, find_c))
+      return true;
+
 
     return true;
 
@@ -114,6 +142,14 @@ public:
 
 
 
+  /*
+   *@return [ture if the condition lambda was true]
+   */
+  template <class T, class Lambda>
+  bool check_cond(std::vector<T* > vec, Lambda cond)
+  {
+    return std::find_if(vec.begin(), vec.end(), cond) != vec.end();
+  };
 
   //----------------------------------------------------------------------------
   // Helper methos
@@ -128,80 +164,65 @@ public:
 
   // TODO >>>>>>>>><<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-  OperatorInfix * getOperator(std::string name, OperatorType type)
-  {
-    return getOperator(_infix_vec_pool, name, type);
-  };
 
 
-  OperatorPostfix * getOperator(std::string name, OperatorType type)
-  {
-    return getOperator(_postfix_vec_pool, name, type);
-  };
+  // template <class O>
+  // O * getOperator(std::vector<O *> & vec, Pos & pos)
+  // {
+  //   switch(pos.type)
+  //     {
+  //     case OperatorType::infix:
+  //       return findOperator(_infix_vec_pool, name, type);
+  //       break;
+
+  //     case OperatorType::single_postfix:
+  //       return findOperator(_postfix_vec_pool, name, type);
+  //       break;
 
 
-  OperatorPrefix * getOperator(std::string name, OperatorType type)
-  {
-    return getOperator(_prefix_vec_pool, name, type);
-  };
+  //     case OperatorType::single_prefix:
+  //       return findOperator(_prefix_vec_pool, name, type);
+  //       break;
 
 
-  OperatorBraces * getOperator(std::string name, OperatorType type)
-  {
-    return getOperator(_braces_vec_pool, name, type);
-  };
+  //     case OperatorType::braces:
+  //       return findOperator(_braces_vec_pool, name, type);
+  //       break;
+  //     }
+  //   // return findOperator(_operators_vec, name, type);
+  // }
+   
+
+  // // TODO >>>>>>>>><<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+  // /*
+  //  * [gets the >>>>first<<<< operator object of the vector that have the same
+  //  * name]
+  //  * @return [a pointer to the operator, NULL if not found]
+  //  */
 
 
-  template <class O>
-  O * getOperator(std::vector<O *> & vec,
-                  std::string name, OperatorType type)
-  {
-    auto is_operator = [name=name, type=type](O * oper){
-                         return (oper->check_name(name)) && (oper->type == type);};
-
-    std::vector<O *>::iterator itr;
-    itr = std::find_if(vec.begin(), vec.end(), is_operator);
-
-    // if not found
-    if (itr == vec.end())
-      return NULL;
-
-    return *itr; // return pointer to the operator
-  }
-
-  // TODO >>>>>>>>><<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-  /*
-   * [gets the >>>>first<<<< operator object of the vector that have the same
-   * name]
-   * @return [a pointer to the operator, NULL if not found]
-   */
+  // Operator * getOperator(std::string name)
+  // {
+  //   return getOperator(_operators_vec, name);
+  // }
 
 
-  Operator * getOperator(std::string name)
-  {
-    return getOperator(_operators_vec, name);
-  }
+  // template <class O>
+  // O * getOperator(std::vector<O *> & vec, std::string name)
+  // {
+  //   auto is_operator = [name=name](O * oper_ptr){
+  //                        return oper_ptr->check_name(name); };
 
+  //   std::vector<O *>::iterator itr;
+  //   itr = std::find_if(vec.begin(), vec.end(), is_operator);
 
-  template <class O>
-  O * getOperator(std::vector<O *> & vec, std::string name)
-  {
-    auto is_operator = [name=name](O * oper_ptr){
-                         return oper_ptr->check_name(name); };
+  //   // if not found
+  //   if (itr == vec.end())
+  //     return NULL;
 
-    std::vector<O *>::iterator itr;
-    itr = std::find_if(vec.begin(), vec.end(), is_operator);
-
-    // if not found
-    if (itr == vec.end())
-      return NULL;
-
-    return *itr; // return pointer to the operator
-  }
-
-
-
+  //   return *itr; // return pointer to the operator
+  // }
 
 
 
@@ -209,11 +230,12 @@ public:
   /*
    * [checks if an operator exists or not with two parametes:
    * its name, and type]
-   * @return [true: if it was found, false if it is not found]
+   * @return [the possiton of the operator in form of Pos strct: if it was found,
+   * NULL if it is not found]
    *
    */
 
-  bool findOperator(std::string name, OperatorType type)
+  Pos findOperator(std::string name, OperatorType type)
   {
     switch(type)
       {
@@ -240,7 +262,7 @@ public:
 
 
   template <class O>
-  bool findOperator(std::vector<O *> & vec,
+  Pos findOperator(std::vector<O *> & vec,
                    std::string name, OperatorType type)
   {
     auto is_operator = [name=name, type=type](O * oper){
@@ -251,10 +273,10 @@ public:
 
     // if not found
     if (itr == vec.end())
-      return false;
+      return;
 
-    return true;
-  }
+    return Pos(it - vec.begin(), type);
+  };
 
 
 
@@ -264,27 +286,27 @@ public:
    *          false: otherwise (operator name does not exist, or used more than
    *          one time) ]
    */
-  bool singleUsedOperator(std::vector<Operator*> vec, std::string name)
-  {
+  // bool singleUsedOperator(std::vector<Operator*> vec, std::string name)
+  // {
 
-    int count = 0;
-    for(std::vector<Operator*>::iterator itr=vec.begin(); itr!=vec.end(); ++itr)
-      {
-        if ((*itr)->check_name(name))
-          count++;
+  //   int count = 0;
+  //   for(std::vector<Operator*>::iterator itr=vec.begin(); itr!=vec.end(); ++itr)
+  //     {
+  //       if ((*itr)->check_name(name))
+  //         count++;
 
-        if (count == 2) //more than one operator has the same name
-          return false;
-      }
+  //       if (count == 2) //more than one operator has the same name
+  //         return false;
+  //     }
 
-    if (count == 1)
-      {
-        return true;
-      }
+  //   if (count == 1)
+  //     {
+  //       return true;
+  //     }
 
-    return false; // the name of the operator does not exists (not logical as we
-                 //checked before this statge)
-  }
+  //   return false; // the name of the operator does not exists (not logical as we
+  //                //checked before this statge)
+  // }
 
 
 
