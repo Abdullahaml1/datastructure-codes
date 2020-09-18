@@ -1,5 +1,5 @@
+#ifndef POLISH_CONVERTER_H
 #define POLISH_CONVERTER_H
-#ifdef POLISH_CONVERTER_H
 
 
 
@@ -9,7 +9,7 @@
 #include <string>
 #include <exception>
 
-#include "Precedence.h"
+#include "OperatorPool.h"
 #include "Operator.h"
 
 
@@ -34,7 +34,7 @@ class PolishConverter
 public:
   PolishConverter()
   {
-    prec_obj = Precedence();
+    operp = OperatorPool();
     loadPrecedence();
   };
 
@@ -64,22 +64,22 @@ public:
   {
 
 
-    prec_obj.append(new OperatorInfix<double, double>("&&", 0,
+    operp.append(new OperatorInfix<double, double>("&&", 0,
                                             [](auto x, auto y){return x+y;}));
 
-    prec_obj.append(new OperatorInfix<double, double>("&&&", 0,
+    operp.append(new OperatorInfix<double, double>("&&&", 0,
                                             [](auto x, auto y){return x+y;}));
 
 
-    prec_obj.append(new OperatorInfix<double, double>("+", 0,
+    operp.append(new OperatorInfix<double, double>("+", 0,
                                             [](auto x, auto y){return x+y;}));
-    prec_obj.append(new OperatorInfix<double, double>("-", 0,
+    operp.append(new OperatorInfix<double, double>("-", 0,
                                             [](auto x, auto y){return x-y;}));
 
 
-    prec_obj.append(new OperatorInfix<double, double>("*", 1,
+    operp.append(new OperatorInfix<double, double>("*", 1,
                                             [](auto x, auto y){return x*y;}));
-    prec_obj.append(new OperatorInfix<double, double>("/", 1,
+    operp.append(new OperatorInfix<double, double>("/", 1,
                                             [](auto x, auto y){return x/y;}));
 
   }
@@ -97,12 +97,22 @@ public:
 
 
 
+  /*
+   * [prase the braces within the expression and return the end star and the end
+   * of the braces expression in a vector at braces_indcies vector at this form
+   * {braes_i_start, braces_i_end, braces_i_start, braes_i_end, ......}]
+   */
+  void parseBraces(std::string            & exp,
+                   std::vector<size_t>    & braces_indcies);
+
+
+
 
 #ifdef IN_OPERATOR
   template<class T>
   bool isInOperator(T  c)
   {
-    return prec_obj.isInOperator(c);
+    return operp.isInOperator(c);
   };
 #endif
 
@@ -111,7 +121,7 @@ private:
   //----------------------------------------------------------------------------
   // class for storing the precedent in the operations
   //----------------------------------------------------------------------------
-  Precedence prec_obj;
+  OperatorPool operp;
 
 };
 #endif /*POLISH_CONVERTER_H*/
