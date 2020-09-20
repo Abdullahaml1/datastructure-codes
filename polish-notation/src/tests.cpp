@@ -82,13 +82,17 @@ class B : public A
 public:
 
 
-    template <class lam>
-    B(int _x,char _type, lam exp):A(_x, _type, exp){};
+  template <class lam>
+  B(int _x,char _type, lam exp):A(_x, _type, exp)
+  {
+    y = 99999;
+  };
 
 
   void print() override
   {
     std::cout << "B: " << x << std::endl;
+    std::cout << "y = " << y << std::endl;
     std::cout << "Lambda int: " << addi(x, 88);
     std::cout << " Lambda float: " << addf(11, 44.44);
     std::cout << " lambda bool: " << addb(x, 1) << std::endl;
@@ -100,6 +104,10 @@ public:
       std::cout << "adding 99" << std::endl;
       y+=99;
   };
+
+
+
+  int y;
 
 
 
@@ -128,6 +136,10 @@ int main()
   cp -> print();
   std::cout << "4.1 + 5.5 =" << cp->eval(4.1, 5.5) << std::endl;
 
+  vec.push_back(new B(10, 'i', [](auto x, auto y){return x+y;}) );
+  A* cp1 = vec.back();
+  cp1 -> print();
+  std::cout << "4.1 + 5.5 =" << cp1->eval(4.1, 5.5) << std::endl;
 
 
 
