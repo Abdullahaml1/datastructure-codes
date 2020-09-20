@@ -34,7 +34,7 @@ class PolishConverter
 public:
   PolishConverter()
   {
-    operp = OperatorPool();
+    oper_pool = OperatorPool();
     loadPrecedence();
   };
 
@@ -64,22 +64,22 @@ public:
   {
 
 
-    operp.append(new OperatorInfix<double, double>("&&", 0,
+    oper_pool.append(new OperatorInfix<double, double>("&&", 0,
                                             [](auto x, auto y){return x+y;}));
 
-    operp.append(new OperatorInfix<double, double>("&&&", 0,
+    oper_pool.append(new OperatorInfix<double, double>("&&&", 0,
                                             [](auto x, auto y){return x+y;}));
 
 
-    operp.append(new OperatorInfix<double, double>("+", 0,
+    oper_pool.append(new OperatorInfix<double, double>("+", 0,
                                             [](auto x, auto y){return x+y;}));
-    operp.append(new OperatorInfix<double, double>("-", 0,
+    oper_pool.append(new OperatorInfix<double, double>("-", 0,
                                             [](auto x, auto y){return x-y;}));
 
 
-    operp.append(new OperatorInfix<double, double>("*", 1,
+    oper_pool.append(new OperatorInfix<double, double>("*", 1,
                                             [](auto x, auto y){return x*y;}));
-    operp.append(new OperatorInfix<double, double>("/", 1,
+    oper_pool.append(new OperatorInfix<double, double>("/", 1,
                                             [](auto x, auto y){return x/y;}));
 
   }
@@ -121,7 +121,7 @@ private:
   //----------------------------------------------------------------------------
   // class for storing the precedent in the operations
   //----------------------------------------------------------------------------
-  OperatorPool operp;
+  OperatorPool oper_pool;
 
 };
 #endif /*POLISH_CONVERTER_H*/
