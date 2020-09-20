@@ -32,11 +32,11 @@ class A
 public:
 
     template <class lam>
-  A(int _x, lam exp):x(_x)
+    A(int _x,char _type, lam exp):x(_x), type(_type)
     {
         addf = exp;
         addi = exp;
-        p = exp;
+        addb = exp;
     };
 
   virtual void print()
@@ -44,10 +44,33 @@ public:
     std::cout << "A: "<< x << std::endl;
   };
 
+  template <typename T>
+  T eval(T a, T b)
+  {
+    switch(type)
+      {
+
+      case 'i':
+        return addi(a, b);
+        break;
+
+      case 'f':
+        return addf(a, b);
+        break;
+
+
+      case 'b':
+        return addb(a, b);
+        break;
+      }
+  };
+
 
   std::function<int(int, int)> addi;
   std::function<float(float, float)> addf;
-  int (*p)(int, int);
+  std::function<bool(bool, bool)> addb;
+
+  char type;
 
 
 
@@ -60,14 +83,15 @@ public:
 
 
     template <class lam>
-  B(int _x, lam exp):A(_x , exp){};
+    B(int _x,char _type, lam exp):A(_x, _type, exp){};
 
 
   void print() override
   {
     std::cout << "B: " << x << std::endl;
-    std::cout << "Lambda int: " << addi(x, 88) << " Lambda float: " << addf((int)11, 44.44) << std::endl; 
-    std::cout << "pinter to function: " << p(x, 99) << std::endl;
+    std::cout << "Lambda int: " << addi(x, 88);
+    std::cout << " Lambda float: " << addf(11, 44.44);
+    std::cout << " lambda bool: " << addb(x, 1) << std::endl;
   };
 
 
@@ -99,15 +123,12 @@ int main()
   // solution for polymorphic pointers: https://stackoverflow.com/questions/32759556/task-list-in-c-vector-with-more-than-one-type
   // much simpler solution to mark methods of the parent class as virtual https://stackoverflow.com/questions/47186497/polymorphic-pointer
   std::vector<A* > vec;
-  vec.push_back(new B(10, [](auto x, auto y){return x+y;}) );
+  vec.push_back(new B(10, 'f', [](auto x, auto y){return x+y;}) );
   A* cp = vec.back();
   cp -> print();
+  std::cout << "4.1 + 5.5 =" << cp->eval(4.1, 5.5) << std::endl;
 
 
-
-  // vec.push_back(new A(10));
-  // cp = vec.back();
-  // cp -> print();
 
 
 #endif
