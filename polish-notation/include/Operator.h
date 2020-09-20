@@ -16,13 +16,22 @@ class Operator
 public:
   Operator(){};
 
-  Operator(std::string _name, int _Per, OperatorType _type):
-                                                      name(_name),
-                                                      periority(_Per),
-                                                      type(_type)
+  Operator(std::string _name, int _Per,OperatorType _type,
+           std::string _data_type): name(_name),
+                                    periority(_Per),
+                                    type(_type), 
+                                    data_type(_data_type)
   {
-  };
 
+    eval_2_int = nullptr;
+    eval_2_double = nullptr;
+    eval_2_bool = nullptr;
+
+
+    eval_1_int = nullptr;
+    eval_1_double = nullptr;
+    eval_1_bool = nullptr;
+  };
 
 
   ~Operator(){};
@@ -48,6 +57,54 @@ public:
     return name.find(c)!=std::string::npos;
   }
 
+
+
+  /**
+   * [evaluation method for the for the operator]
+   */
+  template <typename T>
+  T eval(T x, T y)
+  {
+    if (data_type == "int")
+      {
+        return eval_2_int(x, y);
+      }
+
+    else if (data_type == "double")
+      {
+        return eval_2_double(x, y);
+      }
+
+    else if (data_type == "bool")
+      {
+        return eval_2_bool(x, y);
+      }
+
+    return nullptr;
+
+  };
+
+  template <typename T>
+  T eval(T x)
+  {
+    if (data_type == "int")
+      {
+        return eval_1_int(x);
+      }
+
+    else if (data_type == "double")
+      {
+        return eval_1_double(x);
+      }
+
+    else if (data_type == "bool")
+      {
+        return eval_1_bool(x);
+      }
+
+    return nullptr;
+  };
+
   // overlaodded operators >, <, ==
 
   bool operator >(Operator* x)
@@ -66,6 +123,53 @@ public:
   }
 
 
+
+
+  //----------------------------------------------------------------------------
+  // helpers
+  //----------------------------------------------------------------------------
+  template <class Lamda>
+  void setup_eval2(std::string & d, Lamda & lam)
+  {
+    if (d == "int")
+      {
+        eval_2_int = lam;
+      }
+
+    else if (d == "double")
+      {
+        eval_2_double = lam;
+      }
+
+    else if (d == "bool")
+      {
+        eval_2_bool = lam;
+      }
+
+  };
+
+
+
+  template <class Lamda>
+  void setup_eval1(std::string & d, Lamda & lam)
+  {
+    if (d == "int")
+      {
+        eval_1_int = lam;
+      }
+
+    else if (d == "double")
+      {
+        eval_1_double = lam;
+      }
+
+    else if (d == "bool")
+      {
+        eval_1_bool = lam;
+      }
+
+  };
+
   //----------------------------------------------------------------------------
   // variabe attribute
   //----------------------------------------------------------------------------
@@ -80,7 +184,20 @@ protected:
 
   std::string name; // for single sympol operator aka(not braces)
 
+  std::string data_type; // int, or double or boolean, .....
 
+
+  // ---------------functions to evaluate the expreesion
+  // 2, or 1 -> the number of input paramers
+
+  std::function<int(int, int)> eval_2_int;
+  std::function<double(double, double)> eval_2_double;
+  std::function<bool(bool, bool)> eval_2_bool;
+
+
+  std::function<int(int)> eval_1_int;
+  std::function<double(double)> eval_1_double;
+  std::function<bool(bool)> eval_1_bool;
 
 };
 
@@ -89,24 +206,18 @@ protected:
 // operator classes
 //------------------------------------------------------------------------------
 
-template <typename Tr, typename Ti>
 class OperatorInfix : public Operator
 {
 public:
 
   template <class Lambda>
-  OperatorInfix(std::string _name, int _per, Lambda _func):
-    Operator(_name, _per, OperatorType::infix), func(_func)
+  OperatorInfix(std::string _name, int _per,std::string _data_type, Lambda lam):
+    Operator(_name, _per, OperatorType::infix, _data_type) 
   {
+    setup_eval2(data_type, lam);
   };
 
 
-  std::function<Tr(Ti, Ti)> func;
-
-  Tr eval(Ti x, Ti y)
-  {
-    return static_cast<Tr>(func(x, y));
-  }
 
 };
 
@@ -115,28 +226,26 @@ public:
 
 
 
-template <typename Tr, typename Ti>
-class OperatorPostfix : public Operator
-{
-public:
+// template <typename Tr, typename Ti>
+// class OperatorPostfix : public Operator
+// {
+// public:
 
-  template <class Lambda>
-  OperatorPostfix(std::string _name, int _per, Lambda _func):
-    Operator(_name, _per, OperatorType::single_postfix), func(_func)
-  {
-  };
-
-
-  std::function<Tr(Ti)> func;
-
-  Tr eval(Ti x)
-  {
-    return static_cast<Tr>(func(x));
-  }
-
-};
+//   template <class Lambda>
+//   OperatorPostfix(std::string _name, int _per, Lambda _func):
+//     Operator(_name, _per, OperatorType::single_postfix), func(_func)
+//   {
+//   };
 
 
+//   std::function<Tr(Ti)> func;
+
+//   Tr eval(Ti x)
+//   {
+//     return static_cast<Tr>(func(x));
+//   }
+
+// };
 
 
 
@@ -144,48 +253,50 @@ public:
 
 
 
-template <typename Tr, typename Ti>
-class OperatorPrefix : public Operator
-{
-public:
-
-  template <class Lambda>
-  OperatorPrefix(std::string _name, int _per, Lambda _func):
-    Operator(_name, _per, OperatorType::single_prefix), func(_func)
-  {
-  };
 
 
-  std::function<Tr(Ti)> func;
+// template <typename Tr, typename Ti>
+// class OperatorPrefix : public Operator
+// {
+// public:
 
-  Tr eval(Ti x)
-  {
-    return static_cast<Tr>(func(x));
-  }
-
-};
-
+//   template <class Lambda>
+//   OperatorPrefix(std::string _name, int _per, Lambda _func):
+//     Operator(_name, _per, OperatorType::single_prefix), func(_func)
+//   {
+//   };
 
 
+//   std::function<Tr(Ti)> func;
 
+//   Tr eval(Ti x)
+//   {
+//     return static_cast<Tr>(func(x));
+//   }
+
+// };
 
 
 
-class OperatorBraces : public Operator
-{
-public:
-
-  OperatorBraces(std::string _s_name, std::string _e_name, int _per):
-    Operator(_s_name+_e_name, _per, OperatorType::braces)
-  {
-  };
 
 
-private:
 
 
-  std::string s_name; // the start of the braces
-  std::string e_name; // the end of the braces
-};
+// class OperatorBraces : public Operator
+// {
+// public:
+
+//   OperatorBraces(std::string _s_name, std::string _e_name, int _per):
+//     Operator(_s_name+_e_name, _per, OperatorType::braces)
+//   {
+//   };
+
+
+// private:
+
+
+//   std::string s_name; // the start of the braces
+//   std::string e_name; // the end of the braces
+// };
 
 #endif /*OPERATOR_H*/

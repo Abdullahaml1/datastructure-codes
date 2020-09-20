@@ -7,7 +7,7 @@
 #include <memory>
 #include <functional>
 
-// #include "PolishConverter.h"
+#include "PolishConverter.h"
 
 // #define LOOP
 // #define IS_DIGIT
@@ -15,7 +15,7 @@
 // #define GET_MAP_VALUE
 // #define IN_OPERATOR
 // #define PARSE_EXP
-#define TEST_INHARITANCE
+// #define TEST_INHARITANCE
 
 
 

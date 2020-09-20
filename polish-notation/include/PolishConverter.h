@@ -64,22 +64,22 @@ public:
   {
 
 
-    oper_pool.append(new OperatorInfix<double, double>("&&", 0,
+    oper_pool.append(new OperatorInfix("&&", 0, "dobule", 
                                             [](auto x, auto y){return x+y;}));
 
-    oper_pool.append(new OperatorInfix<double, double>("&&&", 0,
+    oper_pool.append(new OperatorInfix("&&&", 0, "dobule",
                                             [](auto x, auto y){return x+y;}));
 
 
-    oper_pool.append(new OperatorInfix<double, double>("+", 0,
+    oper_pool.append(new OperatorInfix("+", 0, "dobule",
                                             [](auto x, auto y){return x+y;}));
-    oper_pool.append(new OperatorInfix<double, double>("-", 0,
+    oper_pool.append(new OperatorInfix("-", 0, "dobule", 
                                             [](auto x, auto y){return x-y;}));
 
 
-    oper_pool.append(new OperatorInfix<double, double>("*", 1,
+    oper_pool.append(new OperatorInfix("*", 1, "dobule",
                                             [](auto x, auto y){return x*y;}));
-    oper_pool.append(new OperatorInfix<double, double>("/", 1,
+    oper_pool.append(new OperatorInfix("/", 1, "dobule",
                                             [](auto x, auto y){return x/y;}));
 
   }
