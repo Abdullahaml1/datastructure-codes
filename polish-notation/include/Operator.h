@@ -19,7 +19,7 @@ public:
   Operator(std::string _name, int _Per,OperatorType _type,
            std::string _data_type): name(_name),
                                     periority(_Per),
-                                    type(_type), 
+                                    type(_type),
                                     data_type(_data_type)
   {
 
@@ -80,8 +80,6 @@ public:
         return eval_2_bool(x, y);
       }
 
-    return nullptr;
-
   };
 
   template <typename T>
@@ -102,7 +100,6 @@ public:
         return eval_1_bool(x);
       }
 
-    return nullptr;
   };
 
   // overlaodded operators >, <, ==
@@ -212,7 +209,7 @@ public:
 
   template <class Lambda>
   OperatorInfix(std::string _name, int _per,std::string _data_type, Lambda lam):
-    Operator(_name, _per, OperatorType::infix, _data_type) 
+    Operator(_name, _per, OperatorType::infix, _data_type)
   {
     setup_eval2(data_type, lam);
   };
@@ -226,26 +223,20 @@ public:
 
 
 
-// template <typename Tr, typename Ti>
-// class OperatorPostfix : public Operator
-// {
-// public:
+class OperatorPostfix : public Operator
+{
+public:
 
-//   template <class Lambda>
-//   OperatorPostfix(std::string _name, int _per, Lambda _func):
-//     Operator(_name, _per, OperatorType::single_postfix), func(_func)
-//   {
-//   };
+  template <class Lambda>
+  OperatorPostfix(std::string _name, int _per,std::string _data_type, Lambda lam):
+    Operator(_name, _per, OperatorType::single_postfix, _data_type)
+  {
+    setup_eval1(data_type, lam);
+  };
 
 
-//   std::function<Tr(Ti)> func;
 
-//   Tr eval(Ti x)
-//   {
-//     return static_cast<Tr>(func(x));
-//   }
-
-// };
+};
 
 
 
@@ -255,26 +246,18 @@ public:
 
 
 
-// template <typename Tr, typename Ti>
-// class OperatorPrefix : public Operator
-// {
-// public:
+class OperatorPrefix : public Operator
+{
+public:
 
-//   template <class Lambda>
-//   OperatorPrefix(std::string _name, int _per, Lambda _func):
-//     Operator(_name, _per, OperatorType::single_prefix), func(_func)
-//   {
-//   };
+  template <class Lambda>
+  OperatorPrefix(std::string _name, int _per, std::string _data_type, Lambda lam):
+    Operator(_name, _per, OperatorType::single_prefix, _data_type)
+  {
+    setup_eval1(data_type, lam);
+  };
 
-
-//   std::function<Tr(Ti)> func;
-
-//   Tr eval(Ti x)
-//   {
-//     return static_cast<Tr>(func(x));
-//   }
-
-// };
+};
 
 
 
@@ -282,21 +265,25 @@ public:
 
 
 
-// class OperatorBraces : public Operator
-// {
-// public:
+class OperatorBraces : public Operator
+{
+public:
 
-//   OperatorBraces(std::string _s_name, std::string _e_name, int _per):
-//     Operator(_s_name+_e_name, _per, OperatorType::braces)
-//   {
-//   };
+  template <class Lambda>
+  OperatorBraces(std::string _s_name, std::string _e_name, int _per, Lambda lam):
+    Operator(_s_name + _e_name, _per, OperatorType::braces, "none"),
+    s_name(_s_name),
+    e_name(_e_name)
+  {
+  };
 
 
-// private:
+
+private:
 
 
-//   std::string s_name; // the start of the braces
-//   std::string e_name; // the end of the braces
-// };
+  std::string s_name; // the start of the braces
+  std::string e_name; // the end of the braces
+};
 
 #endif /*OPERATOR_H*/

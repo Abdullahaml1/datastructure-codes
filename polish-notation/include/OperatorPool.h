@@ -108,18 +108,10 @@ public:
 
   Operator * getOperator(std::string name, OperatorType type)
   {
-    return getOperator(operator_vec_pool, name, type);
+    return findOperator(operator_vec_pool, name, type);
   };
 
 
-  Operator * getOperator(std::vector<Operator *> & vec,
-                  std::string name, OperatorType type)
-  {
-    return findOperator(vec, name, type);
-  };
-
-
-  // TODO
   /*
    * [gets the >>>>first<<<< operator object of the vector that have the same
    * name]
@@ -129,6 +121,7 @@ public:
 
   Operator * getOperator(std::string name)
   {
+    return findOperator(operator_vec_pool, name);
   };
 
 
@@ -136,9 +129,9 @@ public:
 
 
   /*
-   * [checks if an operator exists or not with two parametes:
-   * its name, and type]
-   * @return [true: if it was found, false if it is not found]
+   * [checks and retuns an operator oject if an operatorif an operator exists or
+   * not with two parametes: its name, and type]
+   * @return [the operator object: if it was found, nullptr if it is not found]
    *
    */
 
@@ -163,6 +156,39 @@ public:
 
     return *itr;
   };
+
+
+  /*
+   * [checks and retuns an operator oject if an operator exists or not with by
+   * its >>>>name<<<<< only]
+   * @return [the operator object: if it was found, nullptr if it is not found]
+   *
+   */
+
+  Operator * findOperator(std::string name)
+  {
+    return findOperator(operator_vec_pool, name);
+  }
+
+
+  Operator * findOperator(std::vector<Operator *> & vec, std::string name)
+  {
+    auto is_operator = [name=name](Operator * oper){
+                         return oper->check_name(name);};
+
+    std::vector<Operator *>::iterator itr;
+    itr = std::find_if(vec.begin(), vec.end(), is_operator);
+
+    // if not found
+    if (itr == vec.end())
+      return nullptr;
+
+    return *itr;
+  };
+
+
+
+
 
 
 

@@ -2,7 +2,7 @@
 #define POLISH_CONVERTER_H
 
 
-
+#include <iostream>
 #include <stdint.h>
 #include <map>
 #include <vector>
@@ -17,6 +17,7 @@
 // tests macros
 //------------------------------------------------------------------------------
 // #define IN_OPERATOR
+#define TEST_EVAL
 
 
 
@@ -64,22 +65,22 @@ public:
   {
 
 
-    oper_pool.append(new OperatorInfix("&&", 0, "dobule", 
+    oper_pool.append(new OperatorInfix("&&", 0, "double",
                                             [](auto x, auto y){return x+y;}));
 
-    oper_pool.append(new OperatorInfix("&&&", 0, "dobule",
+    oper_pool.append(new OperatorInfix("&&&", 0, "double",
                                             [](auto x, auto y){return x+y;}));
 
 
-    oper_pool.append(new OperatorInfix("+", 0, "dobule",
+    oper_pool.append(new OperatorInfix("+", 0, "double",
                                             [](auto x, auto y){return x+y;}));
-    oper_pool.append(new OperatorInfix("-", 0, "dobule", 
+    oper_pool.append(new OperatorInfix("-", 0, "dobule",
                                             [](auto x, auto y){return x-y;}));
 
 
-    oper_pool.append(new OperatorInfix("*", 1, "dobule",
+    oper_pool.append(new OperatorInfix("*", 1, "double",
                                             [](auto x, auto y){return x*y;}));
-    oper_pool.append(new OperatorInfix("/", 1, "dobule",
+    oper_pool.append(new OperatorInfix("/", 1, "double",
                                             [](auto x, auto y){return x/y;}));
 
   }
@@ -112,7 +113,27 @@ public:
   template<class T>
   bool isInOperator(T  c)
   {
-    return operp.isInOperator(c);
+    return oper_pool.isInOperator(c);
+  };
+#endif
+
+
+#ifdef TEST_EVAL
+  void test_eval(double x, double y, std::string oper_name)
+  {
+    Operator * oper = oper_pool.getOperator(oper_name);
+
+    if (oper)
+      {
+        std::cout << "evaluation of operator: " << oper-> get_name() << std::endl;
+        std::cout << x << oper-> get_name() << y << "=";
+        std::cout << oper->eval(x, y) << std::endl;
+      }
+
+    else 
+      {
+        std::cout << "operator: " << oper_name << "not found" << std::endl;
+      }
   };
 #endif
 
