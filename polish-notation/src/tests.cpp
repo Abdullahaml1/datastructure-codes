@@ -9,11 +9,9 @@
 
 #include "PolishConverter.h"
 
-// #define LOOP
+#define LOOP
 // #define IS_DIGIT
 // #define REMOVE_SPACES
-// #define GET_MAP_VALUE
-// #define IN_OPERATOR
 // #define PARSE_EXP
 // #define TEST_INHARITANCE
 
@@ -124,7 +122,7 @@ int main()
   signal (SIGINT,my_handler);
 
 
-  // PolishConverter pol;
+  PolishConverter pol;
 
 
 #ifdef TEST_INHARITANCE
@@ -146,13 +144,6 @@ int main()
 #endif
 
 
-#ifdef GET_MAP_VALUE
-  std::map <std::string, int> hash;
-  hash ["+"] = 3;
-  int x  = 0 ;
-  std::cout << pol.getMapValue(hash, std::string("+"), x) << " the value = " << x << std::endl; // for a sstring
-  std::cout << pol.getMapValue(hash, std::string(1, '-'), x) << " the value = " << x << std::endl; //for a single char
-#endif
 
 
 
@@ -229,7 +220,38 @@ int main()
         }
       std::cout << "------------------" << std::endl;
 #endif
-    }
+
+
+#ifdef TEST_EVAL
+      std::string str;
+      std::string oper_name;
+      double x, y;
+
+      std::cout << "input the firist parameter: " ;
+      getline(std::cin, str);
+      x = std::stod(str);
+
+
+      std::cout << "input the operator " ;
+      getline(std::cin, str);
+      oper_name = str;
+
+
+      std::cout << "input the second parameter: " ;
+      getline(std::cin, str);
+      y = std::stod(str);
+
+      pol.test_eval(x, y, oper_name);
+
 #endif
+
+
+
+    }
+#endif /*LOOP*/
+
+
+
+
   return 0;
 }
