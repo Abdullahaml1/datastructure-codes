@@ -125,6 +125,25 @@ public:
   };
 
 
+  /*
+   * [gets the  operator >>>braces<<<< object of the vector that have the same
+   * name]
+   * @param name [the start or the end of the braces]
+   * @return [a pointer to the operator, nullptr if not found]
+   */
+
+
+  OperatorBraces * getBraces(std::string name)
+  {
+    return (OperatorBraces *)findOperator(operator_vec_pool, name, OperatorType::braces);
+  };
+
+
+
+
+
+
+
 
 
 

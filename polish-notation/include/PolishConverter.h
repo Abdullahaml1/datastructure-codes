@@ -83,7 +83,10 @@ public:
     oper_pool.append(new OperatorInfix("/", 1, "double",
                                             [](auto x, auto y){return x/y;}));
 
-  }
+    // braces
+    oper_pool.append(new OperatorBraces("(", ")", 999));
+
+  };
 
 
 

@@ -269,8 +269,7 @@ class OperatorBraces : public Operator
 {
 public:
 
-  template <class Lambda>
-  OperatorBraces(std::string _s_name, std::string _e_name, int _per, Lambda lam):
+  OperatorBraces(std::string _s_name, std::string _e_name, int _per):
     Operator(_s_name + _e_name, _per, OperatorType::braces, "none"),
     s_name(_s_name),
     e_name(_e_name)
@@ -278,6 +277,21 @@ public:
   };
 
 
+  bool check_name(std::string str)
+  {
+    return (str == s_name) || (str == e_name);
+  };
+
+  bool check_start(std::string str)
+  {
+    return str == s_name;
+  };
+
+
+  bool check_end(std::string str)
+  {
+    return str == e_name;
+  };
 
 private:
 
