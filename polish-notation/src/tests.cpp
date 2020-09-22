@@ -9,7 +9,7 @@
 
 #include "PolishConverter.h"
 
-#define LOOP
+// #define LOOP
 // #define IS_DIGIT
 // #define REMOVE_SPACES
 // #define PARSE_EXP
@@ -97,10 +97,10 @@ public:
   };
 
 
-  void add99(int & y)
+  void add99(int & m)
   {
       std::cout << "adding 99" << std::endl;
-      y+=99;
+      m+=99;
   };
 
 
@@ -133,11 +133,19 @@ int main()
   A* cp = vec.back();
   cp -> print();
   std::cout << "4.1 + 5.5 =" << cp->eval(4.1, 5.5) << std::endl;
+  std::cout << std::endl;
 
   vec.push_back(new B(10, 'i', [](auto x, auto y){return x+y;}) );
   A* cp1 = vec.back();
   cp1 -> print();
   std::cout << "4.1 + 5.5 =" << cp1->eval(4.1, 5.5) << std::endl;
+  std::cout << std::endl;
+
+  B * b = (B*)vec.back();
+  int z = 0;
+  b -> add99(z);
+  std::cout << "z =" << z << std::endl;
+
 
 
 

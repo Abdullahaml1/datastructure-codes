@@ -17,7 +17,7 @@
 // tests macros
 //------------------------------------------------------------------------------
 // #define IN_OPERATOR
-#define TEST_EVAL
+// #define TEST_EVAL
 
 
 
@@ -130,7 +130,7 @@ public:
         std::cout << oper->eval(x, y) << std::endl;
       }
 
-    else 
+    else
       {
         std::cout << "operator: " << oper_name << "not found" << std::endl;
       }
