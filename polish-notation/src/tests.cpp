@@ -9,7 +9,7 @@
 
 #include "PolishConverter.h"
 
-// #define LOOP
+#define LOOP
 // #define IS_DIGIT
 // #define REMOVE_SPACES
 // #define PARSE_EXP
@@ -252,6 +252,58 @@ int main()
       pol.test_eval(x, y, oper_name);
 
 #endif
+
+
+
+
+#ifdef INFIX_TO_POSTFIX
+      std::string exp;
+      std::vector<size_t> indcies;
+      std::vector<Parameter> types;
+
+      getline(std::cin, exp);
+      pol.removeSpaces(exp);
+      pol.parseExp(exp, indcies, types);
+      std::cout << "indces size = " << indcies.size() << std::endl;
+      std::cout << "[";
+      for(int i=0; i<indcies.size(); i++)
+        std::cout << indcies[i] << ", ";
+      std::cout << "]";
+      std::cout<< std::endl;
+
+      std::cout << "[";
+      for(int i=0; i<types.size(); i++)
+        {
+          if (types[i] == Parameter::oprand)
+            std::cout << "oprand" << ", ";
+          else if (types[i] == Parameter::operate)
+            std::cout << "operator" << ", ";
+        }
+     std::cout << "]";
+     std::cout<< std::endl;
+     std::cout << "types size = " << types.size() << std::endl;
+
+      std::vector<size_t>::iterator i_itr;
+      std::vector<Parameter>::iterator t_itr;
+      for (i_itr = indcies.begin(), t_itr = types.begin(); t_itr != types.end(); i_itr++, t_itr++)
+        {
+          std::cout<<std::string(exp, *i_itr, *(i_itr + 1) - *i_itr);
+          if (*t_itr == Parameter::oprand)
+            std::cout << "    oprand";
+          else if (*t_itr == Parameter::operate)
+            std::cout << "    operator";
+
+          std::cout << std::endl;
+
+        }
+
+
+      std::string outexp;
+      pol.infixToPostfix(exp, outexp);
+
+      std::cout << "------------------" << std::endl;
+#endif
+
 
 
 
