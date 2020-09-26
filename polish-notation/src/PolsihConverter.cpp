@@ -147,26 +147,14 @@ void PolishConverter::infixToPostfix(std::string exp, std::string & post_fix)
   removeSpaces(exp);
   parseExp(exp, indcies, types);
 
+ #ifdef INFIX_TO_POSTFIX
+  size_t i= 0;
+  std::cout << "IN infixToPostfix method, get_str_param(" << i << ")  =";
+  std::cout << get_str_param(exp, indcies, i) << std::endl;
+#endif
 
 
-  std::vector<size_t>::iterator i_itr;
-  std::vector<Parameter>::iterator t_itr;
-  for (i_itr = indcies.begin(), t_itr = types.begin(); t_itr != types.end();
-       i_itr++, t_itr++)
-    {
-      std::string param = std::string(exp, *i_itr, *(i_itr + 1) - *i_itr);
-
-      if (*t_itr == Parameter::oprand)
-        {
-        }
-
-      else if (*t_itr == Parameter::operate)
-        {
-        }
-
-    }
-
-  /*
+    /*
   std::string::iterator itr, last_itr, num_start, num_end;
   Stack operators;
 
