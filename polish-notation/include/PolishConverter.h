@@ -18,6 +18,7 @@
 //------------------------------------------------------------------------------
 // #define IN_OPERATOR
 // #define TEST_EVAL
+#define TEST_PARSE_BRACES
 #define INFIX_TO_POSTFIX
 
 
@@ -134,10 +135,11 @@ public:
    * [prase the braces within the expression and return the end star and the end
    * of the braces expression in a vector of OperatorBraces objects]
    */
-  void parseBraces(std::string             & exp,
-                   Stack<OperatorBraces *> & braces_stack,
-                   std::vector<size_t>     & indcies,
-                   std::vector<Parameter>  & types);
+  void parseBraces(std::string                   & exp,
+                   std::vector<OperatorBraces *> & braces_vec,
+                   std::vector<size_t>           & indcies,
+                   std::vector<Parameter>        & types);
+
 
 
 

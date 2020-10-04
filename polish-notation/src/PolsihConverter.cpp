@@ -149,15 +149,14 @@ void PolishConverter::parseExp(std::string            & exp,
 
 
 
-void PolishConverter::parseBraces(std::string             & exp,
-                                  Stack<OperatorBraces *> & braces_stack,
-                                  std::vector<size_t>     & indcies,
-                                  std::vector<Parameter>  & types)
+void PolishConverter::parseBraces(std::string                   & exp,
+                                  std::vector<OperatorBraces *> & braces_vec,
+                                  std::vector<size_t>           & indcies,
+                                  std::vector<Parameter>        & types)
 {
   OperatorBraces * b = nullptr, * b_s = nullptr;
   std::string opr_str;
 
-  std::cout << "braces stack size=" << braces_stack.size() << std::endl;
 
 
   for(size_t i=0; i<types.size(); i++)
@@ -167,37 +166,46 @@ void PolishConverter::parseBraces(std::string             & exp,
           opr_str = get_str_param(exp, indcies, i);
           b = oper_pool.getBraces(opr_str);
 
-          if (!braces_stack.isEmpty())
+          if (!braces_vec.empty())
             {
-              braces_stack.top(b_s);
+              b_s = braces_vec.back(); // last element
             }
 
           if (b != nullptr) // its is a braces
             {
               
-              if (braces_stack.isEmpty() && b-> check_start(opr_str))
+              if (braces_vec.empty() && b-> check_start(opr_str))
                 {
                   b -> append_exp_start(indcies[i+1]);
-                  braces_stack.push(b);
+                  braces_vec.push_back(b);
                 }
 
               // the start of the braces
-              else if( !braces_stack.isEmpty() &&
-                       b_s -> check_exp_end_changed() &&
-                       b -> check_start(opr_str))
+              else if( !braces_vec.empty() && b -> check_start(opr_str))
                 {
 
                   b -> append_exp_start(indcies[i+1]);
-                  braces_stack.push(b);
+                  braces_vec.push_back(b);
                 }
 
 
-              // the stack is not empty 
-              else if( !braces_stack.isEmpty() &&
-                       !b_s -> check_exp_end_changed() &&
-                       b -> check_end(opr_str))
+              //  we will loop untill we find a matching brace
+              else if( !braces_vec.empty() && b -> check_end(opr_str))
                 {
-                  b_s -> append_exp_end(indcies[i-1]);
+                  for(int j=braces_vec.size()-1; j>-1; j--)
+                    {
+                      if (!braces_vec[j] -> check_exp_end_changed())
+                        {
+                          braces_vec[j] -> append_exp_end(indcies[i-1]);
+                          break;
+                        }
+
+                      // we reached the end withot finding a matching brace
+                      else if(j == 0)
+                        {
+                          print_braces_message(exp, indcies[i], "Expected start of the braces before the end");
+                        }
+                    }
                 }
 
 
@@ -210,6 +218,26 @@ void PolishConverter::parseBraces(std::string             & exp,
         } // the string is a valid ooperator
     } // for loop
 
+
+
+  for(int j=braces_vec.size()-1; j>-1; j--)
+    {
+      if (!braces_vec[j] -> check_exp_end_changed())
+        {
+          size_t i = braces_vec[j] -> get_exp_start();
+          print_braces_message(exp, i-1, "the braces has no end");
+        }
+    }
+
+
+#ifdef TEST_PARSE_BRACES
+  for(int j=braces_vec.size()-1; j>-1; j--)
+    {
+      std::cout << "bracs[" << j << "] start = " << braces_vec[j] -> get_exp_start();
+      std::cout << ", end= " << braces_vec[j] -> get_exp_end() << std::endl;
+
+    }
+#endif
 
 };
                    
@@ -231,13 +259,13 @@ void PolishConverter::infixToPostfix(std::string exp, std::string & post_fix)
 {
   std::vector<size_t> indcies; //donates the start and stop of each parameter
   std::vector<Parameter> types; // the type of each parameter
-  Stack<OperatorBraces *> braces_stack;
+  std::vector<OperatorBraces *> braces_vec;
   Stack<std::string> oper_s;
 
 
   removeSpaces(exp);
   parseExp(exp, indcies, types);
-  parseBraces(exp, braces_stack, indcies, types);
+  parseBraces(exp, braces_vec, indcies, types);
 
 //  #ifdef INFIX_TO_POSTFIX
 //   size_t i= 0;
