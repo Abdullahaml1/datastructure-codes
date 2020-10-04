@@ -11,7 +11,7 @@
 
 #include "OperatorPool.h"
 #include "Operator.h"
-
+#include "Stack.h"
 
 //------------------------------------------------------------------------------
 // tests macros
@@ -22,8 +22,6 @@
 
 
 // ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// TODO add a method that take the (indcies, operator/oprand) return a string
-// for this parameter
 
 // TODO add braces parser method
 
@@ -105,27 +103,27 @@ public:
                 std::vector<size_t>    & indcies,
                 std::vector<Parameter> & types );
 
-  
-  
-  
+
+
+
   /**
-   * [returns the str extracted from an str expression using the start and 
+   * [returns the str extracted from an str expression using the start and
    * the end of its postion (stored in indcies vector exits if an error happend]
    */
 
-  std::string get_str_param(std::string exp, std::vector<size_t> indcies,
+  std::string get_str_param(std::string & exp, std::vector<size_t> & indcies,
                             size_t i)
   {
-    if (i <= indcies.size()) // our range form i to i+1 
+    if (i <= indcies.size()) // our range form i to i+1
       {
-        if (indcies[i+1] < exp.size()) // max (indcies[i+1] ) = exp.size()
+        if (indcies[i+1] <= exp.size()) // max (indcies[i+1] ) = exp.size()
           {
             return std::string(exp, indcies[i], indcies[i+1] - indcies[i]);
           }
       }
 
-    std::cout << "\n in method get_str_param " ;
-    std::cout << "indix out or range or something else" << std::endl;
+    std::cout << "\n in method get_str_param at index=" << i; ;
+    std::cout << "is out or range or something else" << std::endl;
     exit(-1);
 
   };
@@ -134,11 +132,12 @@ public:
 
   /*
    * [prase the braces within the expression and return the end star and the end
-   * of the braces expression in a vector at braces_indcies vector at this form
-   * {braes_i_start, braces_i_end, braces_i_start, braes_i_end, ......}]
+   * of the braces expression in a vector of OperatorBraces objects]
    */
-  void parseBraces(std::string            & exp,
-                   std::vector<size_t>    & braces_indcies);
+  void parseBraces(std::string             & exp,
+                   Stack<OperatorBraces *> & braces_stack,
+                   std::vector<size_t>     & indcies,
+                   std::vector<Parameter>  & types);
 
 
 

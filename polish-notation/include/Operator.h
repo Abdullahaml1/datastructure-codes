@@ -263,7 +263,6 @@ public:
 
 
 
-// TODO ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 class OperatorBraces : public Operator
 {
@@ -272,7 +271,9 @@ public:
   OperatorBraces(std::string _s_name, std::string _e_name, int _per):
     Operator(_s_name + _e_name, _per, OperatorType::braces, "none"),
     s_name(_s_name),
-    e_name(_e_name)
+    e_name(_e_name),
+    exp_start_index(0),
+    exp_end_index(0)
   {
   };
 
@@ -293,11 +294,81 @@ public:
     return str == e_name;
   };
 
+
+
+
+
+
+
+  /**
+   * [append the start of the expresion index within the braces]
+   */
+  void append_exp_start(size_t i)
+  {
+    exp_start_index = i;
+  };
+
+  /**
+   * [returns the start of the expresion index within the braces]
+   */
+  size_t get_exp_start()
+  {
+    return exp_start_index;
+  };
+
+  bool check_exp_start(size_t i)
+  {
+    return i == exp_start_index;
+  };
+
+
+
+
+
+  /**
+
+   * [append the end of the expresion index within the braces]
+   */
+  void append_exp_end(size_t i)
+  {
+    exp_end_index = i;
+  };
+
+  /**
+   * [returns the end of the expresion index within the braces]
+   */
+  size_t get_exp_end()
+  {
+    return exp_end_index;
+  };
+
+
+  bool check_exp_end(size_t i)
+  {
+    return i == exp_end_index;
+  };
+
+  bool check_exp_end_changed()
+  {
+    return exp_end_index != 0;
+  };
+
+
+
+  OperatorBraces * clone()
+  {
+    return new OperatorBraces(s_name, e_name, periority);
+  }
+
 private:
 
 
   std::string s_name; // the start of the braces
   std::string e_name; // the end of the braces
+
+  size_t exp_start_index; // the start of the expresion index within the braces
+  size_t exp_end_index; // the end of the expresion index within the braces
+
 };
 
 #endif /*OPERATOR_H*/

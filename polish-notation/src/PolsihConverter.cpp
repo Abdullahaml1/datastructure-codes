@@ -3,7 +3,6 @@
 #include <iostream>
 #include <sstream>
 
-#include "Stack.h"
 
 template <class T>
 void invalid_arguemt_excep(T param)
@@ -12,6 +11,17 @@ void invalid_arguemt_excep(T param)
   oss << "'" << param << "'"<< " is not VALID" << std::endl;
   throw std::invalid_argument(oss.str());
 }
+
+
+void print_braces_message(std::string & exp, size_t i, std::string msg)
+{
+  std::cout << std::endl << msg;
+  std::cout << std::endl << exp << std::endl;
+  std::cout << std::string(i, ' ') << "^";
+  std::cout << std::endl;
+  exit(-1);
+
+};
 
 
 bool PolishConverter::isDigit(char c)
@@ -137,21 +147,103 @@ void PolishConverter::parseExp(std::string            & exp,
 
 
 
+
+
+void PolishConverter::parseBraces(std::string             & exp,
+                                  Stack<OperatorBraces *> & braces_stack,
+                                  std::vector<size_t>     & indcies,
+                                  std::vector<Parameter>  & types)
+{
+  OperatorBraces * b = nullptr, * b_s = nullptr;
+  std::string opr_str;
+
+  std::cout << "braces stack size=" << braces_stack.size() << std::endl;
+
+
+  for(size_t i=0; i<types.size(); i++)
+    {
+      if (types[i] == Parameter::operate)
+        {
+          opr_str = get_str_param(exp, indcies, i);
+          b = oper_pool.getBraces(opr_str);
+
+          if (!braces_stack.isEmpty())
+            {
+              braces_stack.top(b_s);
+            }
+
+          if (b != nullptr) // its is a braces
+            {
+              
+              if (braces_stack.isEmpty() && b-> check_start(opr_str))
+                {
+                  b -> append_exp_start(indcies[i+1]);
+                  braces_stack.push(b);
+                }
+
+              // the start of the braces
+              else if( !braces_stack.isEmpty() &&
+                       b_s -> check_exp_end_changed() &&
+                       b -> check_start(opr_str))
+                {
+
+                  b -> append_exp_start(indcies[i+1]);
+                  braces_stack.push(b);
+                }
+
+
+              // the stack is not empty 
+              else if( !braces_stack.isEmpty() &&
+                       !b_s -> check_exp_end_changed() &&
+                       b -> check_end(opr_str))
+                {
+                  b_s -> append_exp_end(indcies[i-1]);
+                }
+
+
+              else 
+                {
+                  print_braces_message(exp, indcies[i], "Expected end of the braces or, beginning with the end of the braces");
+                }
+
+            } // if (b != nullptr) 
+        } // the string is a valid ooperator
+    } // for loop
+
+
+};
+                   
+                  
+
+
+
+
+
+
+
+      
+
+
+
+
+
 void PolishConverter::infixToPostfix(std::string exp, std::string & post_fix)
 {
   std::vector<size_t> indcies; //donates the start and stop of each parameter
   std::vector<Parameter> types; // the type of each parameter
+  Stack<OperatorBraces *> braces_stack;
   Stack<std::string> oper_s;
 
 
   removeSpaces(exp);
   parseExp(exp, indcies, types);
+  parseBraces(exp, braces_stack, indcies, types);
 
- #ifdef INFIX_TO_POSTFIX
-  size_t i= 0;
-  std::cout << "IN infixToPostfix method, get_str_param(" << i << ")  =";
-  std::cout << get_str_param(exp, indcies, i) << std::endl;
-#endif
+//  #ifdef INFIX_TO_POSTFIX
+//   size_t i= 0;
+//   std::cout << "IN infixToPostfix method, get_str_param(" << i << ")  =";
+//   std::cout << get_str_param(exp, indcies, i) << std::endl;
+// #endif
 
 
     /*
