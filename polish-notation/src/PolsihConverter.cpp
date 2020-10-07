@@ -269,11 +269,6 @@ void PolishConverter::infixToPostfix(std::string exp, std::string & post_fix)
   parseExp(exp, indcies, types);
   parseBraces(exp, braces_vec, indcies, types);
 
-//  #ifdef INFIX_TO_POSTFIX
-//   size_t i= 0;
-//   std::cout << "IN infixToPostfix method, get_str_param(" << i << ")  =";
-//   std::cout << get_str_param(exp, indcies, i) << std::endl;
-// #endif
 
 
     /*
