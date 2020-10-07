@@ -154,7 +154,7 @@ void PolishConverter::parseBraces(std::string                   & exp,
                                   std::vector<size_t>           & indcies,
                                   std::vector<Parameter>        & types)
 {
-  OperatorBraces * b = nullptr, * b_s = nullptr;
+  OperatorBraces * b = nullptr;
   std::string opr_str;
 
 
@@ -166,37 +166,33 @@ void PolishConverter::parseBraces(std::string                   & exp,
           opr_str = get_str_param(exp, indcies, i);
           b = oper_pool.getBraces(opr_str);
 
-          if (!braces_vec.empty())
-            {
-              b_s = braces_vec.back(); // last element
-            }
 
           if (b != nullptr) // its is a braces
             {
-              
+
               if (braces_vec.empty() && b-> check_start(opr_str))
                 {
-                  b -> append_exp_start(indcies[i+1]);
-                  braces_vec.push_back(b);
+                  braces_vec.push_back(b -> clone());
+                  braces_vec.back() -> append_exp_start(indcies[i+1]);
                 }
+
 
               // the start of the braces
               else if( !braces_vec.empty() && b -> check_start(opr_str))
                 {
-
-                  b -> append_exp_start(indcies[i+1]);
-                  braces_vec.push_back(b);
+                  braces_vec.push_back(b -> clone());
+                  braces_vec.back() -> append_exp_start(indcies[i+1]);
                 }
 
 
-              //  we will loop untill we find a matching brace
+              //  we will loop in braces_vec untill we find a matching brace
               else if( !braces_vec.empty() && b -> check_end(opr_str))
                 {
                   for(int j=braces_vec.size()-1; j>-1; j--)
                     {
                       if (!braces_vec[j] -> check_exp_end_changed())
                         {
-                          braces_vec[j] -> append_exp_end(indcies[i-1]);
+                          braces_vec[j] -> append_exp_end(indcies[i] -1);
                           break;
                         }
 
@@ -209,17 +205,18 @@ void PolishConverter::parseBraces(std::string                   & exp,
                 }
 
 
-              else 
+              else
                 {
                   print_braces_message(exp, indcies[i], "Expected end of the braces or, beginning with the end of the braces");
                 }
 
-            } // if (b != nullptr) 
+            } // if (b != nullptr)
         } // the string is a valid ooperator
     } // for loop
 
 
 
+  // checking if the braces start but has no closer
   for(int j=braces_vec.size()-1; j>-1; j--)
     {
       if (!braces_vec[j] -> check_exp_end_changed())
@@ -235,6 +232,11 @@ void PolishConverter::parseBraces(std::string                   & exp,
     {
       std::cout << "bracs[" << j << "] start = " << braces_vec[j] -> get_exp_start();
       std::cout << ", end= " << braces_vec[j] -> get_exp_end() << std::endl;
+      std::cout << exp << std::endl;
+      std::cout << std::string(braces_vec[j] -> get_exp_start() - 1, ' ') << "^";
+      std::cout << std::string(braces_vec[j] -> get_exp_end() -
+                               braces_vec[j] -> get_exp_start() +1, ' ') << "^";
+      std::cout << std::endl;
 
     }
 #endif

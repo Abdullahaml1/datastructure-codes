@@ -135,15 +135,8 @@ public:
 
   OperatorBraces * getBraces(std::string name)
   {
-    OperatorBraces * b =(OperatorBraces *)findOperator(operator_vec_pool, name,
+    return (OperatorBraces *)findOperator(operator_vec_pool, name,
                                                        OperatorType::braces);
-
-    if (b != nullptr)
-      {
-        return b-> clone();
-      }
-
-    return nullptr;
   };
 
 
