@@ -43,14 +43,58 @@ public:
 
   ~PolishConverter(){};
 
-  void infixToPostfix(std::string exp, std::string & post_fix);
+
+
+  void infixToPostfix(std::string & exp, std::string & postfix_exp,
+                      std::vector<size_t> & out_indcies,
+                      std::vector<Operator*> & out_operator_vec);
+
+  
+  std::string infixToPostfix(std::string exp)
+  {
+    std::vector<size_t>  out_indcies;
+    std::vector<Operator*>  out_operator_vec;
+    std::string postfix_exp;
+
+    infixToPostfix(exp, postfix_exp, out_indcies, out_operator_vec);
+
+
+    /*
+      do some stuff
+     */
+
+    return postfix_exp;
+  };
+
+    
+  
+
   /**
-   * [checks if the char is a valid digit]
+   * [checks if the char is a valid digitl
    * @return [true: if a valid digit
    *          false: otherwise]
    */
   bool isDigit(char c);
 
+  
+  
+
+
+  /**
+   * [performs the actual infix to postfix conversion]
+   */
+  void infixToPostfix_algorithm(std::string & exp,
+                                std::vector<size_t> & in_indcies,
+                                std::vector<Parameter> & types,
+                                std::vector<OperatorBraces *> & braces_vec,
+
+                                std::ostringstream & postfix_oss,
+                                std::vector<size_t> & out_indcies,
+                                std::vector<Operator *> & out_operator_vec, 
+
+                                int offset);
+
+  
 
   /**
    * [removes blank spaces form an exepression]
@@ -107,6 +151,7 @@ public:
   /**
    * [returns the str extracted from an str expression using the start and
    * the end of its postion (stored in indcies vector exits if an error happend]
+   * @input i [the start of the postion we want to get]
    */
 
   std::string get_str_param(std::string & exp, std::vector<size_t> & indcies,

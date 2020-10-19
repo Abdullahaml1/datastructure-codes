@@ -252,4 +252,4 @@ private:
 };
 
 
-#endif /*PRENCEDENCE_H*/
+#endif /* OPERATOR_POOL_H */

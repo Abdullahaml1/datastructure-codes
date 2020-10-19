@@ -242,27 +242,52 @@ void PolishConverter::parseBraces(std::string                   & exp,
 #endif
 
 };
-                   
-                  
 
 
+void PolishConverter::infixToPostfix_algorithm(std::string & exp,
+                                               std::vector<size_t> & in_indcies,
+                                               std::vector<Parameter> & types,
+                                               std::vector<OperatorBraces *> & braces_vec,
 
+                                               std::ostringstream & postfix_oss,
+                                               std::vector<size_t> & out_indcies,
+                                               std::vector<Operator *> & out_operator_vec, 
 
+                                               int offset =0)
+{
+  // TODO ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  std::string param;
+  for (size_t i=0; i<types.size(), i++)
+    {
+      param = get_str_param(exp, in_indcies,i);   
 
-
-
+      if (type[i] == Parameter::oprand)
+        {
+          postfix_oss << param;
+        }
       
+    }
+
+}
 
 
 
 
 
-void PolishConverter::infixToPostfix(std::string exp, std::string & post_fix)
+
+
+
+
+void PolishConverter::infixToPostfix(std::string & exp, std::string & postfix_exp,
+                                     std::vector<size_t> & out_indcies,
+                                     std::vector<Operator*> & out_operator_vec)
 {
   std::vector<size_t> indcies; //donates the start and stop of each parameter
   std::vector<Parameter> types; // the type of each parameter
   std::vector<OperatorBraces *> braces_vec;
-  Stack<std::string> oper_s;
+  Stack<Operator *> oper_stack;
+  std::ostringstream postfix_oss;
+
 
 
   removeSpaces(exp);
@@ -270,6 +295,10 @@ void PolishConverter::infixToPostfix(std::string exp, std::string & post_fix)
   parseBraces(exp, braces_vec, indcies, types);
 
 
+  infixToPostfix_algorithm(exp, indcies, types, braces_vec,
+                           postfix_oss, out_indcies, out_operator_vec);
+
+  postfix_exp = postfix_oss.str();
 
     /*
   std::string::iterator itr, last_itr, num_start, num_end;
