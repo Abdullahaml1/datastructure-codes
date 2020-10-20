@@ -9,7 +9,7 @@
 
 #include "PolishConverter.h"
 
-// #define LOOP
+#define LOOP
 // #define IS_DIGIT
 // #define REMOVE_SPACES
 // #define PARSE_EXP
@@ -300,8 +300,7 @@ int main()
         }
 
 
-      std::string outexp;
-      pol.infixToPostfix(exp);
+      std::cout << "postfix: " << pol.infixToPostfix(exp)<< std::endl;
 
       std::cout << "------------------" << std::endl;
 

@@ -55,15 +55,23 @@ public:
     std::vector<size_t>  out_indcies;
     std::vector<Operator*>  out_operator_vec;
     std::string postfix_exp;
+    std::string str = "";
 
     infixToPostfix(exp, postfix_exp, out_indcies, out_operator_vec);
 
+
+    for( int i=0; i < (out_indcies.size()-1); i++)
+      {
+        str += get_str_param(postfix_exp, out_indcies, i);
+        str += " ";
+
+      }
 
     /*
       do some stuff
      */
 
-    return postfix_exp;
+    return str;
   };
 
     
@@ -84,15 +92,16 @@ public:
    * [performs the actual infix to postfix conversion]
    */
   void infixToPostfix_algorithm(std::string & exp,
+                                int exp_start_index,
+                                int exp_end_index,
                                 std::vector<size_t> & in_indcies,
                                 std::vector<Parameter> & types,
                                 std::vector<OperatorBraces *> & braces_vec,
 
-                                std::ostringstream & postfix_oss,
+                                std::string & postfix_str,
                                 std::vector<size_t> & out_indcies,
-                                std::vector<Operator *> & out_operator_vec, 
+                                std::vector<Operator *> & out_operator_vec);
 
-                                int offset);
 
   
 
@@ -138,8 +147,15 @@ public:
 
 
   /*
-   * [sotres the indcies of the parameters of a string exepression in the given
-   * vector]
+   * [parse the expression and sotres the indix of every pramters in the 
+   *  expression in indcies and their types in types vector]
+   * @input exp       [the string expression]
+   * @input indcies   [a vector of the start index of each paramter in the exp,
+   *                   it begins with 0 and ends with the size of the exp]
+   * @input types     [a vector of pramters types can be oprand or operate]
+   *
+   * example: exp = "11+3.3" , exp.size() = 6
+   * indcies = [0, 2, 3, 6], types = [oprand, operate, oprand]
    */
   void parseExp(std::string            & exp,
                 std::vector<size_t>    & indcies,
@@ -176,6 +192,7 @@ public:
   /*
    * [prase the braces within the expression and return the end star and the end
    * of the braces expression in a vector of OperatorBraces objects]
+   * example: exp = "(1+1)"
    */
   void parseBraces(std::string                   & exp,
                    std::vector<OperatorBraces *> & braces_vec,

@@ -245,28 +245,125 @@ void PolishConverter::parseBraces(std::string                   & exp,
 
 
 void PolishConverter::infixToPostfix_algorithm(std::string & exp,
+                                               int exp_start_index,
+                                               int exp_end_index,
                                                std::vector<size_t> & in_indcies,
                                                std::vector<Parameter> & types,
                                                std::vector<OperatorBraces *> & braces_vec,
 
-                                               std::ostringstream & postfix_oss,
+                                               std::string & postfix_str,
                                                std::vector<size_t> & out_indcies,
-                                               std::vector<Operator *> & out_operator_vec, 
+                                               std::vector<Operator *> & out_operator_vec)
 
-                                               int offset =0)
 {
-  // TODO ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  std::string param;
-  for (size_t i=0; i<types.size(), i++)
+  // get the start of the exp in the in_indcies vector
+  int loop_start = 0;
+  for (int i=0; i < in_indcies.size(); i++)
     {
-      param = get_str_param(exp, in_indcies,i);   
-
-      if (type[i] == Parameter::oprand)
+      if (in_indcies[i] == exp_start_index)
         {
-          postfix_oss << param;
+          loop_start = i;
+          break;
         }
-      
     }
+
+
+  std::string param;
+  Operator * opr;
+  Operator * top_opr;
+  Stack<Operator*> opr_stack;
+
+  std::cout << "loop start = " << loop_start << std::endl;
+
+  for (int i = loop_start; in_indcies[i] <= exp_end_index; i++)
+    {
+
+      std::cout << "in_incies[i] = " << in_indcies[i] << std::endl;
+
+      param = get_str_param(exp, in_indcies,i);
+
+      if (types[i] == Parameter::oprand)
+        {
+          out_indcies.push_back(postfix_str.size()); // the star of the oprand
+          out_operator_vec.push_back(new Operator()); // an operator with no type
+          postfix_str += param;
+        }
+
+      else
+        {
+          opr = oper_pool.getOperator(param);
+          switch(opr -> type)
+            {
+            case OperatorType::infix :
+              if (opr_stack.isEmpty())
+                {
+                  opr_stack.push(opr);
+                }
+
+              else
+                {
+                  opr_stack.top(top_opr);
+
+                  if (opr -> bigger(top_opr))
+                    {
+                      opr_stack.push(opr);
+                    }
+
+                  else
+                    {
+                      while (opr -> smaller_or_equal(top_opr) &&
+                             ! opr_stack.isEmpty())
+                        {
+                          opr_stack.pop(top_opr);
+
+                          // the star of the oprand
+                          out_indcies.push_back(postfix_str.size()); 
+
+                          out_operator_vec.push_back(top_opr); 
+                          postfix_str += top_opr -> get_name();
+
+                        }
+
+                      opr_stack.push(opr);
+                    }
+                }
+
+              
+              break;
+
+            case OperatorType::single_prefix :
+              break;
+
+            case OperatorType::single_postfix :
+              break;
+
+            case OperatorType::braces :
+              break;
+
+
+            }
+
+        }
+    }
+
+
+
+
+  // flush all the remainder of operators in the stack
+  while (! opr_stack.isEmpty())
+    {
+      opr_stack.pop(top_opr);
+
+      // the star of the oprand
+      out_indcies.push_back(postfix_str.size()); 
+
+      out_operator_vec.push_back(top_opr); 
+      postfix_str += top_opr -> get_name();
+    }
+
+
+  // out_indcies should end with the string size
+  out_indcies.push_back(postfix_str.size());
 
 }
 
@@ -286,7 +383,6 @@ void PolishConverter::infixToPostfix(std::string & exp, std::string & postfix_ex
   std::vector<Parameter> types; // the type of each parameter
   std::vector<OperatorBraces *> braces_vec;
   Stack<Operator *> oper_stack;
-  std::ostringstream postfix_oss;
 
 
 
@@ -295,10 +391,10 @@ void PolishConverter::infixToPostfix(std::string & exp, std::string & postfix_ex
   parseBraces(exp, braces_vec, indcies, types);
 
 
-  infixToPostfix_algorithm(exp, indcies, types, braces_vec,
-                           postfix_oss, out_indcies, out_operator_vec);
+  postfix_exp = "";
+  infixToPostfix_algorithm(exp, 0, exp.size()-1, indcies, types, braces_vec,
+                           postfix_exp, out_indcies, out_operator_vec);
 
-  postfix_exp = postfix_oss.str();
 
     /*
   std::string::iterator itr, last_itr, num_start, num_end;

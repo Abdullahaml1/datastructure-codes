@@ -14,7 +14,8 @@ enum class OperatorType {infix, single_postfix, single_prefix, braces};
 class Operator
 {
 public:
-  Operator(){};
+  Operator():name("")
+  {};
 
   Operator(std::string _name, int _Per,OperatorType _type,
            std::string _data_type): name(_name),
@@ -104,17 +105,27 @@ public:
 
   // overlaodded operators >, <, ==
 
-  bool operator >(Operator* x)
+  bool bigger (Operator* x)
   {
     return (this->periority) > (x-> periority) ;
   }
 
-  bool operator <(Operator* x)
+
+  bool bigger_or_equal (Operator* x)
+    {
+     return (this->periority) >= (x-> periority) ;
+    }
+
+  bool smaller (Operator* x)
   {
     return (this->periority) < (x-> periority) ;
   }
 
-  bool operator ==(Operator* x)
+  bool smaller_or_equal (Operator* x)
+  {
+    return (this->periority) <= (x-> periority) ;
+  }
+  bool equal (Operator* x)
   {
     return (this->periority) == (x-> periority) ;
   }
