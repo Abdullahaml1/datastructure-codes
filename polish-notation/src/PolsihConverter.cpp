@@ -309,26 +309,31 @@ void PolishConverter::infixToPostfix_algorithm(std::string & exp,
                       opr_stack.push(opr);
                     }
 
-                  else
+                  else if (opr -> smaller_or_equal(top_opr))
                     {
+
                       while (opr -> smaller_or_equal(top_opr) &&
                              ! opr_stack.isEmpty())
                         {
                           opr_stack.pop(top_opr);
 
                           // the star of the oprand
-                          out_indcies.push_back(postfix_str.size()); 
+                          out_indcies.push_back(postfix_str.size());
 
-                          out_operator_vec.push_back(top_opr); 
+                          out_operator_vec.push_back(top_opr);
                           postfix_str += top_opr -> get_name();
 
+                          if (!opr_stack.isEmpty())
+                            {
+                              opr_stack.top(top_opr);
+                            }
                         }
 
                       opr_stack.push(opr);
                     }
                 }
 
-              
+
               break;
 
             case OperatorType::single_prefix :
@@ -355,9 +360,9 @@ void PolishConverter::infixToPostfix_algorithm(std::string & exp,
       opr_stack.pop(top_opr);
 
       // the star of the oprand
-      out_indcies.push_back(postfix_str.size()); 
+      out_indcies.push_back(postfix_str.size());
 
-      out_operator_vec.push_back(top_opr); 
+      out_operator_vec.push_back(top_opr);
       postfix_str += top_opr -> get_name();
     }
 

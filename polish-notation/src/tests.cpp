@@ -301,6 +301,7 @@ int main()
 
 
       std::cout << "postfix: " << pol.infixToPostfix(exp)<< std::endl;
+      std::cout << "infix: " << exp << std::endl;
 
       std::cout << "------------------" << std::endl;
 
