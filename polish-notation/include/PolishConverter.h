@@ -74,8 +74,7 @@ public:
     return str;
   };
 
-    
-  
+
 
   /**
    * [checks if the char is a valid digitl
@@ -84,8 +83,7 @@ public:
    */
   bool isDigit(char c);
 
-  
-  
+
 
 
   /**
@@ -138,6 +136,12 @@ public:
     oper_pool.append(new OperatorInfix("/", 1, "double",
                                             [](auto x, auto y){return x/y;}));
 
+
+    // power
+    oper_pool.append(new OperatorInfix("**", 2, "double",
+                                       [](auto x, auto y){auto ans=1;
+                                         for(int i=0;i<(int)y;i++){ans *= x;}
+                                         return ans;}));
     // braces
     oper_pool.append(new OperatorBraces("(", ")", 999));
 
