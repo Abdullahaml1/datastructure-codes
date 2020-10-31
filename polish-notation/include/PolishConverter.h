@@ -94,7 +94,7 @@ public:
                                int exp_end_index,
                                std::vector<size_t> & in_indcies,
                                std::vector<Parameter> & types,
-                               std::vector<OperatorBraces *>::iterator braces_itr,
+                               std::vector<OperatorBraces *> & braces_vec,
 
                                std::string & postfix_str,
                                std::vector<size_t> & out_indcies,

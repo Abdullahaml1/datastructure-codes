@@ -249,13 +249,15 @@ int PolishConverter::infixToPostfix_algorithm(std::string & exp,
                                               int exp_end_index,
                                               std::vector<size_t> & in_indcies,
                                               std::vector<Parameter> & types,
-                                              std::vector<OperatorBraces *>::iterator braces_itr,
+                                              std::vector<OperatorBraces *> & braces_vec,
 
                                               std::string & postfix_str,
                                               std::vector<size_t> & out_indcies,
                                               std::vector<Operator *> & out_operator_vec)
 
 {
+  static int braces_offset =0;
+
   // get the start of the exp in the in_indcies vector
   int loop_start = 0;
   for (int i=0; i < in_indcies.size(); i++)
@@ -344,11 +346,12 @@ int PolishConverter::infixToPostfix_algorithm(std::string & exp,
 
             case OperatorType::braces :
 
-              braces = *braces_itr;
+              braces = braces_vec[braces_offset];
+              braces_offset ++;
 
               i = infixToPostfix_algorithm(exp, braces -> get_exp_start(),
                                            braces -> get_exp_end(), in_indcies, types,
-                                           braces_itr + 1, postfix_str, out_indcies,
+                                           braces_vec, postfix_str, out_indcies,
                                            out_operator_vec);
 
               break;
@@ -378,6 +381,7 @@ int PolishConverter::infixToPostfix_algorithm(std::string & exp,
   if (i == in_indcies.size() -1)
     {
       out_indcies.push_back(postfix_str.size());
+      braces_offset = 0; // reset the variable while exiting the expression
     }
   
 
@@ -402,12 +406,16 @@ void PolishConverter::infixToPostfix(std::string & exp, std::string & postfix_ex
   std::vector<OperatorBraces *> braces_vec;
   Stack<Operator *> oper_stack;
 
+
   removeSpaces(exp);
   parseExp(exp, indcies, types);
   parseBraces(exp, braces_vec, indcies, types);
 
+
   postfix_exp = "";
-  infixToPostfix_algorithm(exp, 0, exp.size()-1, indcies, types, braces_vec.begin(),
+  infixToPostfix_algorithm(exp, 0, exp.size()-1, indcies, types, braces_vec,
                            postfix_exp, out_indcies, out_operator_vec);
+
+
 }
 
