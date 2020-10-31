@@ -244,16 +244,16 @@ void PolishConverter::parseBraces(std::string                   & exp,
 };
 
 
-void PolishConverter::infixToPostfix_algorithm(std::string & exp,
-                                               int exp_start_index,
-                                               int exp_end_index,
-                                               std::vector<size_t> & in_indcies,
-                                               std::vector<Parameter> & types,
-                                               std::vector<OperatorBraces *> & braces_vec,
+int PolishConverter::infixToPostfix_algorithm(std::string & exp,
+                                              int exp_start_index,
+                                              int exp_end_index,
+                                              std::vector<size_t> & in_indcies,
+                                              std::vector<Parameter> & types,
+                                              std::vector<OperatorBraces *>::iterator braces_itr,
 
-                                               std::string & postfix_str,
-                                               std::vector<size_t> & out_indcies,
-                                               std::vector<Operator *> & out_operator_vec)
+                                              std::string & postfix_str,
+                                              std::vector<size_t> & out_indcies,
+                                              std::vector<Operator *> & out_operator_vec)
 
 {
   // get the start of the exp in the in_indcies vector
@@ -272,13 +272,13 @@ void PolishConverter::infixToPostfix_algorithm(std::string & exp,
   Operator * opr;
   Operator * top_opr;
   Stack<Operator*> opr_stack;
+  OperatorBraces * braces;
 
-  std::cout << "loop start = " << loop_start << std::endl;
 
-  for (int i = loop_start; in_indcies[i] <= exp_end_index; i++)
+  int i=0;
+  for (i = loop_start; in_indcies[i] <= exp_end_index; i++)
     {
 
-      std::cout << "in_incies[i] = " << in_indcies[i] << std::endl;
 
       param = get_str_param(exp, in_indcies,i);
 
@@ -343,8 +343,15 @@ void PolishConverter::infixToPostfix_algorithm(std::string & exp,
               break;
 
             case OperatorType::braces :
-              break;
 
+              braces = *braces_itr;
+
+              i = infixToPostfix_algorithm(exp, braces -> get_exp_start(),
+                                           braces -> get_exp_end(), in_indcies, types,
+                                           braces_itr + 1, postfix_str, out_indcies,
+                                           out_operator_vec);
+
+              break;
 
             }
 
@@ -368,7 +375,13 @@ void PolishConverter::infixToPostfix_algorithm(std::string & exp,
 
 
   // out_indcies should end with the string size
-  out_indcies.push_back(postfix_str.size());
+  if (i == in_indcies.size() -1)
+    {
+      out_indcies.push_back(postfix_str.size());
+    }
+  
+
+  return i; // returning the index of the last element in the in_indcies
 
 }
 
@@ -389,34 +402,12 @@ void PolishConverter::infixToPostfix(std::string & exp, std::string & postfix_ex
   std::vector<OperatorBraces *> braces_vec;
   Stack<Operator *> oper_stack;
 
-
-
   removeSpaces(exp);
   parseExp(exp, indcies, types);
   parseBraces(exp, braces_vec, indcies, types);
 
-
   postfix_exp = "";
-  infixToPostfix_algorithm(exp, 0, exp.size()-1, indcies, types, braces_vec,
+  infixToPostfix_algorithm(exp, 0, exp.size()-1, indcies, types, braces_vec.begin(),
                            postfix_exp, out_indcies, out_operator_vec);
-
-
-    /*
-  std::string::iterator itr, last_itr, num_start, num_end;
-  Stack operators;
-
-  while (itr != exp.end())
-    {
-           // if it is a sympol push it to the stack
-
-        // check if the operator has more han one sympol
-
-          // if the sympol has a single left opernad
-
-          // if the symple has a single right operand
-
-          // if the operator is infix
-    }
-    */
 }
 

@@ -18,7 +18,7 @@
 //------------------------------------------------------------------------------
 // #define IN_OPERATOR
 // #define TEST_EVAL
-#define TEST_PARSE_BRACES
+// #define TEST_PARSE_BRACES
 #define INFIX_TO_POSTFIX
 
 
@@ -49,7 +49,7 @@ public:
                       std::vector<size_t> & out_indcies,
                       std::vector<Operator*> & out_operator_vec);
 
-  
+
   std::string infixToPostfix(std::string exp)
   {
     std::vector<size_t>  out_indcies;
@@ -89,19 +89,19 @@ public:
   /**
    * [performs the actual infix to postfix conversion]
    */
-  void infixToPostfix_algorithm(std::string & exp,
-                                int exp_start_index,
-                                int exp_end_index,
-                                std::vector<size_t> & in_indcies,
-                                std::vector<Parameter> & types,
-                                std::vector<OperatorBraces *> & braces_vec,
+  int infixToPostfix_algorithm(std::string & exp,
+                               int exp_start_index,
+                               int exp_end_index,
+                               std::vector<size_t> & in_indcies,
+                               std::vector<Parameter> & types,
+                               std::vector<OperatorBraces *>::iterator braces_itr,
 
-                                std::string & postfix_str,
-                                std::vector<size_t> & out_indcies,
-                                std::vector<Operator *> & out_operator_vec);
+                               std::string & postfix_str,
+                               std::vector<size_t> & out_indcies,
+                               std::vector<Operator *> & out_operator_vec);
 
 
-  
+
 
   /**
    * [removes blank spaces form an exepression]
