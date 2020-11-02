@@ -13,13 +13,12 @@ void invalid_arguemt_excep(T param)
 }
 
 
-void print_braces_message(std::string & exp, size_t i, std::string msg)
+void point_and_print(std::string & exp, size_t i, std::string msg)
 {
   std::cout << std::endl << msg;
   std::cout << std::endl << exp << std::endl;
   std::cout << std::string(i, ' ') << "^";
   std::cout << std::endl;
-  exit(-1);
 
 };
 
@@ -149,6 +148,47 @@ void PolishConverter::parseExp(std::string            & exp,
 
 
 
+void PolishConverter::parseOprands(std::string                   & exp,
+                                   std::vector<size_t>           & indcies,
+                                   std::vector<Parameter>        & types)
+{
+  std::string param;
+  bool decimal_point_found = false;
+
+  for(int i=0; i<types.size();i++)
+    {
+      if(types[i] == Parameter::oprand)
+        {
+          param = get_str_param(exp, indcies, i);
+          decimal_point_found = false;
+
+          for(int j=0; j<param.size();j++)
+            {
+
+              if(decimal_point_found && (param[j] == '.'))
+                {
+                  point_and_print(exp, j+indcies[i],
+                                  "Synatac error: More than decimal point");
+                  exit(-1);
+                }
+              else if( param[j] == '.')
+                {
+                  decimal_point_found = true;
+                }
+
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
 void PolishConverter::parseBraces(std::string                   & exp,
                                   std::vector<OperatorBraces *> & braces_vec,
                                   std::vector<size_t>           & indcies,
@@ -199,7 +239,8 @@ void PolishConverter::parseBraces(std::string                   & exp,
                       // we reached the end withot finding a matching brace
                       else if(j == 0)
                         {
-                          print_braces_message(exp, indcies[i], "Expected start of the braces before the end");
+                          point_and_print(exp, indcies[i], "Expected start of the braces before the end");
+                          exit(-1);
                         }
                     }
                 }
@@ -207,7 +248,8 @@ void PolishConverter::parseBraces(std::string                   & exp,
 
               else
                 {
-                  print_braces_message(exp, indcies[i], "Expected end of the braces or, beginning with the end of the braces");
+                  point_and_print(exp, indcies[i], "Expected end of the braces or, beginning with the end of the braces");
+                  exit(-1);
                 }
 
             } // if (b != nullptr)
@@ -222,7 +264,8 @@ void PolishConverter::parseBraces(std::string                   & exp,
       if (!braces_vec[j] -> check_exp_end_changed())
         {
           size_t i = braces_vec[j] -> get_exp_start();
-          print_braces_message(exp, i-1, "the braces has no end");
+          point_and_print(exp, i-1, "the braces has no end");
+          exit(-1);
         }
     }
 
@@ -383,7 +426,6 @@ int PolishConverter::infixToPostfix_algorithm(std::string & exp,
       out_indcies.push_back(postfix_str.size());
       braces_offset = 0; // reset the variable while exiting the expression
     }
-  
 
   return i; // returning the index of the last element in the in_indcies
 
@@ -409,6 +451,7 @@ void PolishConverter::infixToPostfix(std::string & exp, std::string & postfix_ex
 
   removeSpaces(exp);
   parseExp(exp, indcies, types);
+  parseOprands(exp, indcies, types);
   parseBraces(exp, braces_vec, indcies, types);
 
 

@@ -67,12 +67,17 @@ public:
 
       }
 
-    /*
-      do some stuff
-     */
 
     return str;
   };
+
+
+  /**
+   * [evaluate a string expressin and handles cases if:  the operator has no
+   * oprands, or oprand with no Operators]
+   * @return [evaluation of the expression]
+   **/
+  double evaluteExpreesion(std::string exp);
 
 
 
@@ -151,7 +156,7 @@ public:
 
 
   /*
-   * [parse the expression and sotres the indix of every pramters in the 
+   * [parse the expression and sotres the indix of every pramters in the
    *  expression in indcies and their types in types vector]
    * @input exp       [the string expression]
    * @input indcies   [a vector of the start index of each paramter in the exp,
@@ -202,6 +207,21 @@ public:
                    std::vector<OperatorBraces *> & braces_vec,
                    std::vector<size_t>           & indcies,
                    std::vector<Parameter>        & types);
+
+
+  /**
+   * [checks if th oprand has only on decimal point .if not it will exit wiht -1]
+   * @input exp       [the string expression]
+   * @input indcies   [a vector of the start index of each paramter in the exp,
+   *                   it begins with 0 and ends with the size of the exp]
+   * @input types     [a vector of pramters types can be oprand or operate]
+   *
+   * example: exp = "11+3.3" , exp.size() = 6
+   * indcies = [0, 2, 3, 6], types = [oprand, operate, oprand]
+  **/
+  void parseOprands(std::string                   & exp,
+                    std::vector<size_t>           & indcies,
+                    std::vector<Parameter>        & types);
 
 
 
