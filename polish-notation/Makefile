@@ -8,7 +8,8 @@ FLG += -g
 
 
 #source file
-SRC := main_test.cpp
+SRC := main.cpp
+SRC += PolishConverter.cpp
 
 
 #Header files
@@ -45,7 +46,8 @@ build-run: build run
 
 #test files
 TEST := tests.cpp
-TEST += PolsihConverter.cpp
+TEST += PolishConverter.cpp
+
 TEST_EXC := tests.run
 
 
