@@ -462,3 +462,11 @@ void PolishConverter::infixToPostfix(std::string & exp, std::string & postfix_ex
 
 }
 
+
+
+
+
+double PolishConverter::evaluteExpreesion(std::string & exp)
+{
+}
+
