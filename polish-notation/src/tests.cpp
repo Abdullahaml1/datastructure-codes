@@ -192,7 +192,7 @@ int main()
 #ifdef PARSE_EXP
       std::string exp;
       std::vector<size_t> indcies;
-      std::vector<Parameter> types;
+      std::vector<ParameterType> types;
 
       getline(std::cin, exp);
       pol.parseExp(exp, indcies, types);
@@ -206,9 +206,9 @@ int main()
       std::cout << "[";
       for(int i=0; i<types.size(); i++)
         {
-          if (types[i] == Parameter::oprand)
+          if (types[i] == ParameterType::oprand)
             std::cout << "oprand" << ", ";
-          else if (types[i] == Parameter::operate)
+          else if (types[i] == ParameterType::operate)
             std::cout << "operator" << ", ";
         }
      std::cout << "]";
@@ -216,13 +216,13 @@ int main()
      std::cout << "types size = " << types.size() << std::endl;
 
       std::vector<size_t>::iterator i_itr;
-      std::vector<Parameter>::iterator t_itr;
+      std::vector<ParameterType>::iterator t_itr;
       for (i_itr = indcies.begin(), t_itr = types.begin(); t_itr != types.end(); i_itr++, t_itr++)
         {
           std::cout<<std::string(exp, *i_itr, *(i_itr + 1) - *i_itr);
-          if (*t_itr == Parameter::oprand)
+          if (*t_itr == ParameterType::oprand)
             std::cout << "    oprand";
-          else if (*t_itr == Parameter::operate)
+          else if (*t_itr == ParameterType::operate)
             std::cout << "    operator";
 
           std::cout << std::endl;
@@ -261,7 +261,7 @@ int main()
 #ifdef INFIX_TO_POSTFIX
       std::string exp;
       std::vector<size_t> indcies;
-      std::vector<Parameter> types;
+      std::vector<ParameterType> types;
 
       getline(std::cin, exp);
       pol.removeSpaces(exp);
@@ -276,9 +276,9 @@ int main()
       std::cout << "[";
       for(int i=0; i<types.size(); i++)
         {
-          if (types[i] == Parameter::oprand)
+          if (types[i] == ParameterType::oprand)
             std::cout << "oprand" << ", ";
-          else if (types[i] == Parameter::operate)
+          else if (types[i] == ParameterType::operate)
             std::cout << "operator" << ", ";
         }
      std::cout << "]";
@@ -286,13 +286,13 @@ int main()
      std::cout << "types size = " << types.size() << std::endl;
 
       std::vector<size_t>::iterator i_itr;
-      std::vector<Parameter>::iterator t_itr;
+      std::vector<ParameterType>::iterator t_itr;
       for (i_itr = indcies.begin(), t_itr = types.begin(); t_itr != types.end(); i_itr++, t_itr++)
         {
           std::cout<<std::string(exp, *i_itr, *(i_itr + 1) - *i_itr);
-          if (*t_itr == Parameter::oprand)
+          if (*t_itr == ParameterType::oprand)
             std::cout << "    oprand";
-          else if (*t_itr == Parameter::operate)
+          else if (*t_itr == ParameterType::operate)
             std::cout << "    operator";
 
           std::cout << std::endl;

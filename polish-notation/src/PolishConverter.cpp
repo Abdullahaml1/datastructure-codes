@@ -51,19 +51,19 @@ void PolishConverter::removeSpaces(std::string &str)
 
 void PolishConverter::parseExp(std::string            & exp,
                                std::vector<size_t>    & indcies,
-                               std::vector<Parameter> & types )
+                               std::vector<ParameterType> & types )
 {
   size_t last_i = 0;
 
   if (isDigit(exp[last_i]))
     {
       indcies.push_back(last_i);
-      types.push_back(Parameter::oprand);
+      types.push_back(ParameterType::oprand);
     }
   else if (oper_pool.isInOperator(exp[last_i]))
     {
       indcies.push_back(last_i);
-      types.push_back(Parameter::operate);
+      types.push_back(ParameterType::operate);
     }
   else
     {
@@ -76,7 +76,7 @@ void PolishConverter::parseExp(std::string            & exp,
       if (isDigit(exp[last_i]) && oper_pool.isInOperator(exp[i]))
         {
           indcies.push_back(i);
-          types.push_back(Parameter::operate);
+          types.push_back(ParameterType::operate);
         }
 
       else if (oper_pool.isInOperator(exp[last_i]) && isDigit(exp[i]))
@@ -98,7 +98,7 @@ void PolishConverter::parseExp(std::string            & exp,
             }
 
           // the number is operand
-          types.push_back(Parameter::oprand);
+          types.push_back(ParameterType::oprand);
         }
 
       // for operantor more than one char
@@ -112,7 +112,7 @@ void PolishConverter::parseExp(std::string            & exp,
             {
               indcies.push_back(i);
               // the next item is an operator
-              types.push_back(Parameter::operate);
+              types.push_back(ParameterType::operate);
             }
         }
 
@@ -150,14 +150,14 @@ void PolishConverter::parseExp(std::string            & exp,
 
 void PolishConverter::parseOprands(std::string                   & exp,
                                    std::vector<size_t>           & indcies,
-                                   std::vector<Parameter>        & types)
+                                   std::vector<ParameterType>        & types)
 {
   std::string param;
   bool decimal_point_found = false;
 
   for(int i=0; i<types.size();i++)
     {
-      if(types[i] == Parameter::oprand)
+      if(types[i] == ParameterType::oprand)
         {
           param = get_str_param(exp, indcies, i);
           decimal_point_found = false;
@@ -192,7 +192,7 @@ void PolishConverter::parseOprands(std::string                   & exp,
 void PolishConverter::parseBraces(std::string                   & exp,
                                   std::vector<OperatorBraces *> & braces_vec,
                                   std::vector<size_t>           & indcies,
-                                  std::vector<Parameter>        & types)
+                                  std::vector<ParameterType>        & types)
 {
   OperatorBraces * b = nullptr;
   std::string opr_str;
@@ -201,7 +201,7 @@ void PolishConverter::parseBraces(std::string                   & exp,
 
   for(size_t i=0; i<types.size(); i++)
     {
-      if (types[i] == Parameter::operate)
+      if (types[i] == ParameterType::operate)
         {
           opr_str = get_str_param(exp, indcies, i);
           b = oper_pool.getBraces(opr_str);
@@ -291,7 +291,7 @@ int PolishConverter::infixToPostfix_algorithm(std::string & exp,
                                               int exp_start_index,
                                               int exp_end_index,
                                               std::vector<size_t> & in_indcies,
-                                              std::vector<Parameter> & types,
+                                              std::vector<ParameterType> & types,
                                               std::vector<OperatorBraces *> & braces_vec,
 
                                               std::string & postfix_str,
@@ -327,7 +327,7 @@ int PolishConverter::infixToPostfix_algorithm(std::string & exp,
 
       param = get_str_param(exp, in_indcies,i);
 
-      if (types[i] == Parameter::oprand)
+      if (types[i] == ParameterType::oprand)
         {
           out_indcies.push_back(postfix_str.size()); // the star of the oprand
           out_operator_vec.push_back(new Operator()); // an operator with no type
@@ -444,7 +444,7 @@ void PolishConverter::infixToPostfix(std::string & exp, std::string & postfix_ex
                                      std::vector<Operator*> & out_operator_vec)
 {
   std::vector<size_t> indcies; //donates the start and stop of each parameter
-  std::vector<Parameter> types; // the type of each parameter
+  std::vector<ParameterType> types; // the type of each parameter
   std::vector<OperatorBraces *> braces_vec;
   Stack<Operator *> oper_stack;
 
@@ -466,7 +466,7 @@ void PolishConverter::infixToPostfix(std::string & exp, std::string & postfix_ex
 
 
 
-double PolishConverter::evaluteExpreesion(std::string & exp)
+double PolishConverter::evaluateExpreesion(std::string  exp)
 {
 }
 

@@ -29,7 +29,7 @@
 
 
 
-enum class Parameter {oprand, operate};
+enum class ParameterType {oprand, operate};
 
 class PolishConverter
 {
@@ -77,7 +77,7 @@ public:
    * oprands, or oprand with no Operators]
    * @return [evaluation of the expression]
    **/
-  double evaluteExpreesion(std::string exp);
+  double evaluateExpreesion(std::string exp);
 
 
 
@@ -98,7 +98,7 @@ public:
                                int exp_start_index,
                                int exp_end_index,
                                std::vector<size_t> & in_indcies,
-                               std::vector<Parameter> & types,
+                               std::vector<ParameterType> & types,
                                std::vector<OperatorBraces *> & braces_vec,
 
                                std::string & postfix_str,
@@ -168,7 +168,7 @@ public:
    */
   void parseExp(std::string            & exp,
                 std::vector<size_t>    & indcies,
-                std::vector<Parameter> & types );
+                std::vector<ParameterType> & types );
 
 
 
@@ -206,7 +206,7 @@ public:
   void parseBraces(std::string                   & exp,
                    std::vector<OperatorBraces *> & braces_vec,
                    std::vector<size_t>           & indcies,
-                   std::vector<Parameter>        & types);
+                   std::vector<ParameterType>        & types);
 
 
   /**
@@ -221,7 +221,7 @@ public:
   **/
   void parseOprands(std::string                   & exp,
                     std::vector<size_t>           & indcies,
-                    std::vector<Parameter>        & types);
+                    std::vector<ParameterType>        & types);
 
 
 
