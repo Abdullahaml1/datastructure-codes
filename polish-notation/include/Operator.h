@@ -4,6 +4,7 @@
 #include <string>
 #include <functional>
 
+#include "Parameter.h"
 
 
 enum class OperatorType {infix, single_postfix, single_prefix, braces};
@@ -11,7 +12,7 @@ enum class OperatorType {infix, single_postfix, single_prefix, braces};
 
 
 
-class Operator
+class Operator : public Parameter
 {
 public:
   Operator():name("")

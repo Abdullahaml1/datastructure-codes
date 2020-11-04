@@ -49,8 +49,8 @@ void PolishConverter::removeSpaces(std::string &str)
 
 
 
-void PolishConverter::parseExp(std::string            & exp,
-                               std::vector<size_t>    & indcies,
+void PolishConverter::parseExp(std::string                & exp,
+                               std::vector<size_t>        & indcies,
                                std::vector<ParameterType> & types )
 {
   size_t last_i = 0;
@@ -150,7 +150,7 @@ void PolishConverter::parseExp(std::string            & exp,
 
 void PolishConverter::parseOprands(std::string                   & exp,
                                    std::vector<size_t>           & indcies,
-                                   std::vector<ParameterType>        & types)
+                                   std::vector<ParameterType>    & types)
 {
   std::string param;
   bool decimal_point_found = false;
@@ -192,7 +192,7 @@ void PolishConverter::parseOprands(std::string                   & exp,
 void PolishConverter::parseBraces(std::string                   & exp,
                                   std::vector<OperatorBraces *> & braces_vec,
                                   std::vector<size_t>           & indcies,
-                                  std::vector<ParameterType>        & types)
+                                  std::vector<ParameterType>    & types)
 {
   OperatorBraces * b = nullptr;
   std::string opr_str;

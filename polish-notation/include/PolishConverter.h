@@ -166,8 +166,8 @@ public:
    * example: exp = "11+3.3" , exp.size() = 6
    * indcies = [0, 2, 3, 6], types = [oprand, operate, oprand]
    */
-  void parseExp(std::string            & exp,
-                std::vector<size_t>    & indcies,
+  void parseExp(std::string                & exp,
+                std::vector<size_t>        & indcies,
                 std::vector<ParameterType> & types );
 
 
@@ -206,7 +206,7 @@ public:
   void parseBraces(std::string                   & exp,
                    std::vector<OperatorBraces *> & braces_vec,
                    std::vector<size_t>           & indcies,
-                   std::vector<ParameterType>        & types);
+                   std::vector<ParameterType>    & types);
 
 
   /**
@@ -221,7 +221,7 @@ public:
   **/
   void parseOprands(std::string                   & exp,
                     std::vector<size_t>           & indcies,
-                    std::vector<ParameterType>        & types);
+                    std::vector<ParameterType>    & types);
 
 
 
