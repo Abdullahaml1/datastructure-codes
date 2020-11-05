@@ -7,7 +7,6 @@
 #include "Parameter.h"
 
 
-enum class OperatorType {infix, single_postfix, single_prefix, braces};
 
 
 
@@ -15,15 +14,17 @@ enum class OperatorType {infix, single_postfix, single_prefix, braces};
 class Operator : public Parameter
 {
 public:
-  Operator():name("")
-  {};
+  Operator(ParameterType _type)
+  {
+    type = _type;
+  };
 
-  Operator(std::string _name, int _Per,OperatorType _type,
+  Operator(std::string _name, int _Per,ParameterType _type,
            std::string _data_type): name(_name),
                                     periority(_Per),
-                                    type(_type),
                                     data_type(_data_type)
   {
+    type = _type;
 
     eval_2_int = nullptr;
     eval_2_double = nullptr;
@@ -186,7 +187,6 @@ public:
 
 
   int periority;
-  OperatorType type;
 
 
 protected:
@@ -221,7 +221,7 @@ public:
 
   template <class Lambda>
   OperatorInfix(std::string _name, int _per,std::string _data_type, Lambda lam):
-    Operator(_name, _per, OperatorType::infix, _data_type)
+    Operator(_name, _per, ParameterType::infix, _data_type)
   {
     setup_eval2(data_type, lam);
   };
@@ -241,7 +241,7 @@ public:
 
   template <class Lambda>
   OperatorPostfix(std::string _name, int _per,std::string _data_type, Lambda lam):
-    Operator(_name, _per, OperatorType::single_postfix, _data_type)
+    Operator(_name, _per, ParameterType::single_postfix, _data_type)
   {
     setup_eval1(data_type, lam);
   };
@@ -264,7 +264,7 @@ public:
 
   template <class Lambda>
   OperatorPrefix(std::string _name, int _per, std::string _data_type, Lambda lam):
-    Operator(_name, _per, OperatorType::single_prefix, _data_type)
+    Operator(_name, _per, ParameterType::single_prefix, _data_type)
   {
     setup_eval1(data_type, lam);
   };
@@ -281,7 +281,7 @@ class OperatorBraces : public Operator
 public:
 
   OperatorBraces(std::string _s_name, std::string _e_name, int _per):
-    Operator(_s_name + _e_name, _per, OperatorType::braces, "none"),
+    Operator(_s_name + _e_name, _per, ParameterType::braces, "none"),
     s_name(_s_name),
     e_name(_e_name),
     exp_start_index(0),

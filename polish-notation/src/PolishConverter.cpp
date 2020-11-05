@@ -301,6 +301,8 @@ int PolishConverter::infixToPostfix_algorithm(std::string & exp,
 {
   static int braces_offset =0;
 
+  Operator * oprand_obj = new Operator(ParameterType::oprand);
+
   // get the start of the exp in the in_indcies vector
   int loop_start = 0;
   for (int i=0; i < in_indcies.size(); i++)
@@ -330,7 +332,7 @@ int PolishConverter::infixToPostfix_algorithm(std::string & exp,
       if (types[i] == ParameterType::oprand)
         {
           out_indcies.push_back(postfix_str.size()); // the star of the oprand
-          out_operator_vec.push_back(new Operator()); // an operator with no type
+          out_operator_vec.push_back(oprand_obj);
           postfix_str += param;
         }
 
@@ -339,7 +341,7 @@ int PolishConverter::infixToPostfix_algorithm(std::string & exp,
           opr = oper_pool.getOperator(param);
           switch(opr -> type)
             {
-            case OperatorType::infix :
+            case ParameterType::infix :
               if (opr_stack.isEmpty())
                 {
                   opr_stack.push(opr);
@@ -381,13 +383,13 @@ int PolishConverter::infixToPostfix_algorithm(std::string & exp,
 
               break;
 
-            case OperatorType::single_prefix :
+            case ParameterType::single_prefix :
               break;
 
-            case OperatorType::single_postfix :
+            case ParameterType::single_postfix :
               break;
 
-            case OperatorType::braces :
+            case ParameterType::braces :
 
               braces = braces_vec[braces_offset];
               braces_offset ++;

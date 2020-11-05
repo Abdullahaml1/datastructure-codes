@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>    // std::find_if
 
+#include "Parameter.h"
 #include "Operator.h"
 
 class OperatorPool
@@ -42,7 +43,7 @@ public:
   /*
    * [gets the prencedent value of the structure]
    */
-  int getPrecedence(std::string name, OperatorType type)
+  int getPrecedence(std::string name, ParameterType type)
   {
     return getOperator(name, type) -> periority;
   };
@@ -106,7 +107,7 @@ public:
    */
 
 
-  Operator * getOperator(std::string name, OperatorType type)
+  Operator * getOperator(std::string name, ParameterType type)
   {
     return findOperator(operator_vec_pool, name, type);
   };
@@ -136,7 +137,7 @@ public:
   OperatorBraces * getBraces(std::string name)
   {
     return (OperatorBraces *)findOperator(operator_vec_pool, name,
-                                                       OperatorType::braces);
+                                                       ParameterType::braces);
   };
 
 
@@ -155,14 +156,14 @@ public:
    *
    */
 
-  Operator * findOperator(std::string name, OperatorType type)
+  Operator * findOperator(std::string name, ParameterType type)
   {
     return findOperator(operator_vec_pool, name, type);
   }
 
 
   Operator * findOperator(std::vector<Operator *> & vec,
-                   std::string name, OperatorType type)
+                   std::string name, ParameterType type)
   {
     auto is_operator = [name=name, type=type](Operator * oper){
                          return (oper->check_name(name)) && (oper->type == type);};

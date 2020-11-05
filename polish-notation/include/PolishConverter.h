@@ -9,6 +9,7 @@
 #include <string>
 #include <exception>
 
+#include "Parameter.h"
 #include "OperatorPool.h"
 #include "Operator.h"
 #include "Stack.h"
@@ -29,7 +30,6 @@
 
 
 
-enum class ParameterType {oprand, operate};
 
 class PolishConverter
 {
