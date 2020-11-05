@@ -470,5 +470,74 @@ void PolishConverter::infixToPostfix(std::string & exp, std::string & postfix_ex
 
 double PolishConverter::evaluateExpreesion(std::string  exp)
 {
+  std::vector<size_t>  out_indcies;
+  std::vector<Operator*>  out_parameter_vec;
+  std::string postfix_exp;
+  std::string str = "";
+
+  infixToPostfix(exp, postfix_exp, out_indcies, out_parameter_vec);
+
+
+  Stack<double> oprand_stack;
+  Operator * opr;
+  std::string param_str;
+  double arg1 = 0, arg2 = 0;
+
+  for (int i=0; i< out_parameter_vec.size(); i++)
+    {
+      opr = out_parameter_vec[i];
+
+      if (opr -> type == ParameterType::oprand)
+        {
+          param_str = get_str_param(exp, out_indcies, i);
+          oprand_stack.push(std::stod(param_str));
+        }
+
+
+      else if (opr -> type == ParameterType::infix)
+        {
+          // get argument 2
+          if (oprand_stack.isEmpty())
+            {
+              std::cout << "\nError missing second argumnet for oprand: '";
+              std::cout << opr -> get_name() << "'\n";
+              exit(-1);
+            }
+          else
+            {
+              oprand_stack.pop(arg2);
+            }
+
+
+          // get argument 1
+          if (oprand_stack.isEmpty())
+            {
+              std::cout << "\nError missing firt argumnet for oprand: '";
+              std::cout << opr -> get_name() << "'\n";
+              exit(-1);
+            }
+          else
+            {
+              oprand_stack.pop(arg1);
+            }
+
+
+          // perform evaulation
+          double result = opr -> eval(arg1, arg2);
+          oprand_stack.push(result);
+        }
+
+      else if (opr -> type == ParameterType::single_prefix)
+        {
+        }
+
+
+      else if (opr -> type == ParameterType::single_postfix)
+        {
+        }
+    }
+
+
+
 }
 

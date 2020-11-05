@@ -53,11 +53,11 @@ public:
   std::string infixToPostfix(std::string exp)
   {
     std::vector<size_t>  out_indcies;
-    std::vector<Operator*>  out_operator_vec;
+    std::vector<Operator*>  out_parameter_vec;
     std::string postfix_exp;
     std::string str = "";
 
-    infixToPostfix(exp, postfix_exp, out_indcies, out_operator_vec);
+    infixToPostfix(exp, postfix_exp, out_indcies, out_parameter_vec);
 
 
     for( int i=0; i < (out_indcies.size()-1); i++)
