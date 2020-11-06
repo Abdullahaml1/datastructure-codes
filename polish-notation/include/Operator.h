@@ -156,6 +156,13 @@ public:
         eval_2_bool = lam;
       }
 
+    else
+      {
+        std::cout << "In operator: '" << name<< "'\n";
+        std::cout << "Error: '" << d << "'" << "not a valid type\n";
+        exit(-1);
+      }
+
   };
 
 
@@ -178,6 +185,12 @@ public:
         eval_1_bool = lam;
       }
 
+    else
+      {
+        std::cout << "In operator: '" << name<< "'\n";
+        std::cout << "Error: '" << d << "'" << "not a valid type\n";
+        exit(-1);
+      }
   };
 
   //----------------------------------------------------------------------------

@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <exception>
+#include <math.h>
 
 #include "Parameter.h"
 #include "OperatorPool.h"
@@ -20,7 +21,8 @@
 // #define IN_OPERATOR
 // #define TEST_EVAL
 // #define TEST_PARSE_BRACES
-#define INFIX_TO_POSTFIX
+// #define INFIX_TO_POSTFIX
+#define EVALUATE_EXPRESSION
 
 
 
@@ -132,7 +134,7 @@ public:
 
     oper_pool.append(new OperatorInfix("+", 0, "double",
                                             [](auto x, auto y){return x+y;}));
-    oper_pool.append(new OperatorInfix("-", 0, "dobule",
+    oper_pool.append(new OperatorInfix("-", 0, "double",
                                             [](auto x, auto y){return x-y;}));
 
 
@@ -142,11 +144,16 @@ public:
                                             [](auto x, auto y){return x/y;}));
 
 
+    // // power
+    // oper_pool.append(new OperatorInfix("**", 2, "double",
+    //                                    [](auto x, auto y){auto ans=1;
+    //                                      for(int i=0;i<(int)y;i++){ans *= x;}
+    //                                      return ans;}));
+
     // power
     oper_pool.append(new OperatorInfix("**", 2, "double",
-                                       [](auto x, auto y){auto ans=1;
-                                         for(int i=0;i<(int)y;i++){ans *= x;}
-                                         return ans;}));
+                                       [](auto x, auto y){ return pow(x, y);}));
+
     // braces
     oper_pool.append(new OperatorBraces("(", ")", 999));
 

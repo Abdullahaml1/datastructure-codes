@@ -308,6 +308,17 @@ int main()
 #endif
 
 
+#ifdef EVALUATE_EXPRESSION
+      std::string exp;
+      getline(std::cin, exp);
+      std::cout << "postfix: " << pol.infixToPostfix(exp)<< std::endl;
+      std::cout << exp << " = " << pol.evaluateExpreesion(exp) << std::endl;
+      std::cout << "------------------" << std::endl;
+
+
+#endif
+
+
 
 
     }

@@ -482,6 +482,7 @@ double PolishConverter::evaluateExpreesion(std::string  exp)
   Operator * opr;
   std::string param_str;
   double arg1 = 0, arg2 = 0;
+  double result = 0;
 
   for (int i=0; i< out_parameter_vec.size(); i++)
     {
@@ -489,7 +490,7 @@ double PolishConverter::evaluateExpreesion(std::string  exp)
 
       if (opr -> type == ParameterType::oprand)
         {
-          param_str = get_str_param(exp, out_indcies, i);
+          param_str = get_str_param(postfix_exp, out_indcies, i);
           oprand_stack.push(std::stod(param_str));
         }
 
@@ -523,7 +524,7 @@ double PolishConverter::evaluateExpreesion(std::string  exp)
 
 
           // perform evaulation
-          double result = opr -> eval(arg1, arg2);
+          result = opr -> eval(arg1, arg2);
           oprand_stack.push(result);
         }
 
@@ -537,7 +538,24 @@ double PolishConverter::evaluateExpreesion(std::string  exp)
         }
     }
 
+  if (oprand_stack.size() > 1)
+    {
+      std::cout << "Error: too many oprands" << std::endl;
+      exit(-1);
+    }
+
+  else if(oprand_stack.isEmpty())
+    {
+      std::cout << "Error: Missing oprands " << std::endl;
+      exit(-1);
+    }
+
+  else
+    {
+      oprand_stack.pop(result);
+    }
 
 
+  return result;
 }
 
