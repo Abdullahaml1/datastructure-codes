@@ -68,6 +68,8 @@ void PolishConverter::parseExp(std::string                & exp,
   else
     {
       // raise exepression invalid operantor
+      point_and_print(exp, last_i, "Error: Invalid operator");
+      exit(-1);
     }
 
 
@@ -94,7 +96,9 @@ void PolishConverter::parseExp(std::string                & exp,
           else
             {
               // raise excepssion invaild operator
-              invalid_arguemt_excep(sym);
+              // invalid_arguemt_excep(sym);
+              point_and_print(exp, i, "Error: Invalid operator");
+              exit(-1);
             }
 
           // the number is operand
@@ -120,7 +124,10 @@ void PolishConverter::parseExp(std::string                & exp,
       else if (!isDigit(exp[i]) && !oper_pool.isInOperator(exp[i]))
         {
           // raise exepession invaild operator
-          invalid_arguemt_excep(exp[i]);
+          // invalid_arguemt_excep(exp[i]);
+          point_and_print(exp, i, "Error: Invalid operator");
+          exit(-1);
+
         }
 
       last_i = i;
@@ -136,7 +143,10 @@ void PolishConverter::parseExp(std::string                & exp,
 
     {
       // raise excepssion invalid sympol
-      invalid_arguemt_excep(temp);
+      // invalid_arguemt_excep(temp);
+      point_and_print(exp, exp.size()-1, "Error: Invalid operator");
+      exit(-1);
+
     }
 
   // if (indcies.back() != exp.size() - 1)
