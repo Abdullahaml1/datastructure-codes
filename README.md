@@ -28,4 +28,12 @@ But if end_pointer = 9, at the next append end_pointer = (1+9) %10 = 0. **Which 
 
 
 # stack-linkedBased-bidirectional-nonhomogeneous
+
+[This stack supports nonhomogeneous data defined in Types.h on one condition:
+ (the data should be continous space in memory)]
+ ex: int, float, double, char, arrays, structs, classed (classes should not
+ use dynamic memory allocation ex: we can not use std::string, or std::vector)
+ you can use any type in stack-linkedBased with the template definition
+
+
 TODO
