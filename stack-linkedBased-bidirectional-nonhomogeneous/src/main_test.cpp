@@ -50,7 +50,7 @@ int my_push(Stack & s, T  element, Types type)
     }
   else
     {
-      s.push((void *)& element, type, sizeof(T));
+      s.push((void *)& element, sizeof(T), type);
     }
   return 0;
 }
@@ -126,7 +126,7 @@ int main()
 
   // pushing an array
   int intArr[5] ={1, 2, 3, 4, 5};
-  s.push((void *)intArr, Types::IntArr, 5*sizeof(int));
+  s.push((void *)intArr, 5*sizeof(int), Types::IntArr);
   std::cout << "pushing an int array of size=" << sizeof(intArr) << std::endl;
   s.traverse(&print_fn);
   std::cout << "size = " << s.size() << "\n\n";

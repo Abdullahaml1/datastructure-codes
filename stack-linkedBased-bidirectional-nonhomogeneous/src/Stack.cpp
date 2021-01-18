@@ -15,7 +15,7 @@ void Stack::initialize()
 
 
 
-void Stack::push(void * element_ptr,Types element_type, size_t element_size)
+void Stack::push(void * element_ptr, size_t element_size, Types element_type)
 {
   // Allocating a new place in memory to the now node
   StackNode * new_node_ptr = (StackNode *) malloc(sizeof(StackNode));

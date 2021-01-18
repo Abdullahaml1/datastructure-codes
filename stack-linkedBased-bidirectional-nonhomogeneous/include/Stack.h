@@ -52,15 +52,25 @@ public:
 
   /**
    * [pushes an element at the top of the stack]
-   * @param element_ptr [the element to be pushed to the stack]
-   * @param element_size [the size of  element to be pushed to the stack]
+   * @param element_ptr [A void pointer to the desired element ]
+   * @param element_size [the size of  element in bytes ]
+   * @param element_type [the type of the element dfined in Types.h]
    */
-  void push(void * element_ptr,Types element_type, size_t element_size);
+  void push(void * element_ptr, size_t element_size, Types element_type);
 
 
 
-
+  /**
+   * [pops an element of the stack]
+   * @param element_ptr [A void pointer to the desired element ]
+   * @param element_size [the size of  element in bytes ]
+   * @param element_type [the type of the element dfined in Types.h]
+   */
   void pop(void *& element_ptr, size_t & element_size, Types & element_type);
+
+  /**
+   * [pops an element of the stack]
+   */
   void pop();
 
 
@@ -74,6 +84,9 @@ public:
 
   /**
    * [hand the top element of stack without affecting it]
+   * @param element_ptr [A void pointer to the desired element ]
+   * @param element_size [the size of  element in bytes ]
+   * @param element_type [the type of the element dfined in Types.h]
    */
   void top(void * &element_ptr,size_t & element_size, Types & element_type);
 
@@ -86,7 +99,7 @@ public:
 
 
   /**
-   * [return the stack to its initialized state ]
+   * [cleans the stack]
    */
   void clean();
 
@@ -97,8 +110,8 @@ public:
   // void copy(Stack & clonned);
 
 
-  /*
-   * [@return the stack size]
+  /**
+   * @return [the number of elements in the stack]
    */
   size_t size();
 
@@ -110,6 +123,7 @@ public:
   bool isEmpty();
 
 
+
   /**
    * [@return True is the stack is Full, and False otherwise]
    */
@@ -119,10 +133,16 @@ public:
   /**
    * [a ways to acess all the elements in the stack. the input function will
    * be at this form:
-   * void fun(uint32 index, int element)
+   * void fun(size_t index, void * element_ptr, size_t element_size, Types element_type)
    {
    // do some thing with index, and element
    }]
+
+   * @param (*fn) a pointer to function with those parameters:
+   *             @param element_ptr [A void pointer to the desired element ]
+   *             @param element_size [the size of  element in bytes ]
+   *             @param element_type [the type of the element dfined in Types.h]
+
   */
   void traverse(void (*fn)(size_t index, void * element_ptr, size_t element_size, Types element_type));
 
