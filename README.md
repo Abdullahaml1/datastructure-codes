@@ -25,3 +25,7 @@ front_pointer = (end_pointer +1) % MAX_QUEUE;
 
 Example: if MAX_QUEUE = 10, end_pointer = 4 at the appending end_pointer = (4 +1) % 10 = 5. </br>
 But if end_pointer = 9, at the next append end_pointer = (1+9) %10 = 0. **Which means we are circulating around the array with two pointers***. The same happens at the dequeueing process.
+
+
+# stack-linkedBased-bidirectional-nonhomogeneous
+TODO
