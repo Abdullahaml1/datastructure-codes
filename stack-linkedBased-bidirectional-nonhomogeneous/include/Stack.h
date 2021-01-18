@@ -59,6 +59,15 @@ public:
   void push(void * element_ptr, size_t element_size, Types element_type);
 
 
+  /**
+   * [pushes an element at the top of the stack]
+   * @param element_ptr [A void pointer to the desired element ]
+   * @param element_size [the size of  element in bytes ]
+   * @param element_type [the type of the element dfined in Types.h]
+   */
+  void push_back(void * element_ptr, size_t element_size, Types element_type);
+
+
 
   /**
    * [pops an element of the stack]
@@ -73,12 +82,19 @@ public:
    */
   void pop();
 
+  /**
+   * [pops an element from the back of the stack]
+   * @param element_ptr [A void pointer to the desired element ]
+   * @param element_size [the size of  element in bytes ]
+   * @param element_type [the type of the element dfined in Types.h]
+   */
+  void pop_back(void *& element_ptr, size_t & element_size, Types & element_type);
 
-  // /**
-  //  * [pops an element form the end of the stack]
-  //  */
-  // void pop_back(T & value);
-  // void pop_back();
+  /**
+   * [pops an element from the back of the stack]
+   */
+  void pop_back();
+
 
 
 
@@ -91,10 +107,16 @@ public:
   void top(void * &element_ptr,size_t & element_size, Types & element_type);
 
 
-  // /**
-  //  * [hand the top element of the end of stack without affecting it]
-  //  */
-  // void top_back(T & value);
+
+  /**
+   * [hand the last element of stack without affecting it]
+   * @param element_ptr [A void pointer to the desired element ]
+   * @param element_size [the size of  element in bytes ]
+   * @param element_type [the type of the element dfined in Types.h]
+   */
+  void last(void * &element_ptr,size_t & element_size, Types & element_type);
+
+
 
 
 
@@ -104,10 +126,10 @@ public:
   void clean();
 
 
-  // /**
-  //  * [copies the stack to another one]
-  //  */
-  // void copy(Stack & clonned);
+  /**
+   * [copies the stack to another one]
+   */
+  void copy(Stack & s_copy);
 
 
   /**
@@ -147,20 +169,6 @@ public:
   void traverse(void (*fn)(size_t index, void * element_ptr, size_t element_size, Types element_type));
 
 
-  // /**
-  //  * [a ways to acess all the elements in the stack wih reverse order
-  //  * (acessing the last element of the stack first)].
-  //  * @param [the input function will be at this form:
-  //  *
-  //  * void fun(uint32 index, int element)
-  //  {
-  //  // do some thing with index, and element
-  //  }]
-  // */
-  // void traverse_backward(void (*fn)(size_t index, T  element));
-
-
-
 
 private:
 
@@ -186,10 +194,6 @@ private:
 
 
 };
-
-// accounting for the template linker issue
-#include "Stack.tpp"
-
 
 #endif
 

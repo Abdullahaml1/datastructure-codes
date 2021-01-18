@@ -57,6 +57,21 @@ int my_push(Stack & s, T  element, Types type)
 
 
 
+template <class T>
+int my_push_back(Stack & s, T  element, Types type)
+{
+  if (s.isFull())
+    {
+      return -1;
+    }
+  else
+    {
+      s.push_back((void *)& element, sizeof(T), type);
+    }
+  return 0;
+}
+
+
 
 template <class T>
 int my_pop(Stack & s, T & element, Types type)
@@ -89,6 +104,35 @@ int my_pop(Stack & s, T & element, Types type)
 
 
 
+template <class T>
+int my_pop_back(Stack & s, T & element, Types type)
+{
+  if (s.isEmpty())
+    {
+      return -1;
+    }
+  else
+    {
+      void * ptr;
+      size_t size;
+      Types t_last;
+
+      if (s.lastElementType == type )
+        {
+          s.pop_back(ptr,size, t_last);
+          element = *(T *)ptr;
+
+          free(ptr); // free the memory location of the pointer
+        }
+      else
+        {
+          return -2;
+        }
+    }
+  return 0;
+}
+
+
 
 
 int main()
@@ -96,7 +140,7 @@ int main()
   Stack s;
   int x_push=0, x_pop=0;
   float float_push=0, float_pop=0;
-  std::string str_push, str_pop;
+  char char_push, char_pop;
 
   // pushing an int element
   x_push = 10;
@@ -124,12 +168,67 @@ int main()
   s.traverse(&print_fn);
   std::cout << "size = " << s.size() << "\n\n";
 
+
+
+  // popping back an int element
+  my_pop_back(s, x_pop, Types::Int);
+  std::cout << "pop back int " << x_pop << std::endl;
+  s.traverse(&print_fn);
+  std::cout << "size = " << s.size() << "\n\n";
+
+
   // pushing an array
   int intArr[5] ={1, 2, 3, 4, 5};
   s.push((void *)intArr, 5*sizeof(int), Types::IntArr);
   std::cout << "pushing an int array of size=" << sizeof(intArr) << std::endl;
   s.traverse(&print_fn);
   std::cout << "size = " << s.size() << "\n\n";
+
+
+
+
+  // pushing back an int element
+  x_push = 99;
+  my_push_back(s, x_push, Types::Int);
+  std::cout << "pushing back int " << x_push << std::endl;
+  s.traverse(&print_fn);
+  std::cout << "size = " << s.size() << "\n\n";
+
+
+  std::cout << "Cleaning stack\n";
+  s.clean();
+  s.traverse(&print_fn);
+  std::cout << "size = " << s.size() << "\n\n";
+
+
+
+
+  // pushing an array
+  int intArr1[5] ={50, 40, 30, 20, 10};
+  s.push_back((void *)intArr1, 5*sizeof(int), Types::IntArr);
+  std::cout << "pushing an int array of size=" << sizeof(intArr1) << std::endl;
+  s.traverse(&print_fn);
+  std::cout << "size = " << s.size() << "\n\n";
+
+
+
+
+
+  // pushing a char element
+  char_push = 'A';
+  my_push(s, char_push, Types::Char);
+  std::cout << "pushing char " << char_push << std::endl;
+  s.traverse(&print_fn);
+  std::cout << "size = " << s.size() << "\n\n";
+
+
+  // copying stack
+  Stack s_copy;
+  std::cout << "copying stack....\n";
+  s.copy(s_copy);
+  s_copy.traverse(&print_fn);
+  std::cout << "size = " << s_copy.size() << "\n\n";
+
 
 
 
