@@ -59,12 +59,11 @@ void Stack::push(void * element_ptr,Types element_type, size_t element_size)
 
 
 
-
-
 // *& reference to pointer
-void Stack::pop(void *& element_ptr, Types & element_type)
+void Stack::pop(void *& element_ptr, size_t & element_size, Types & element_type)
 {
   element_ptr = stack_ptr -> element_ptr;
+  element_size = stack_ptr -> size;
   topElementType = stack_ptr -> type;
 
   pop();
@@ -115,6 +114,19 @@ size_t Stack::size()
 
 
 
+// *& reference to pointer
+void Stack::top(void *& element_ptr, size_t & element_size, Types & element_type)
+{
+  element_ptr = stack_ptr -> element_ptr;
+  element_size = stack_ptr -> size;
+  topElementType = stack_ptr -> type;
+
+}
+
+
+
+
+
 
 void Stack::clean()
 {
@@ -153,4 +165,22 @@ bool Stack::isEmpty()
 bool Stack::isFull()
 {
   return false;
+}
+
+
+
+
+
+
+void Stack::traverse(void (*fn)(size_t index, void * element_ptr,size_t element_size, Types element_type))
+{
+  StackNode * node_ptr = stack_ptr;
+  size_t index = size_count ;
+
+  while (node_ptr != NULL)
+    {
+      fn(--index, node_ptr -> element_ptr,node_ptr -> size, node_ptr -> type );
+
+      node_ptr = node_ptr -> next;
+    }
 }

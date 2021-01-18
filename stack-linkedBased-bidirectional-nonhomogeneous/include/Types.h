@@ -6,6 +6,7 @@ enum Types
   Char,
     Int,
     Float,
+    IntArr,
     Last
 };
 

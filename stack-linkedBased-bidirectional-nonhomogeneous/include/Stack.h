@@ -11,16 +11,23 @@ struct StackNode
 public:
 
   void * element_ptr;
+  Types type;   // the type of the element;
+  size_t size;  // the size of the element in bytes
 
   StackNode * next;
   StackNode * prev;
 
-  Types type;   // the type of the element;
-  size_t size;  // the size of the element in bytes
 };
 
 
 
+/**
+ * [This stack supports nonhomogeneous data defined in Types.h on one condition:
+ * (the data should be continous space in memory)]
+ * ex: int, float, double, char, arrays, structs, classed (classes should not
+ * use dynamic memory allocation ex: we can not use std::string, or std::vector)
+ * you can use any type in stack-linkedBased with the template definition
+ */
 class Stack
 {
 public:
@@ -45,7 +52,7 @@ public:
 
   /**
    * [pushes an element at the top of the stack]
-   * @param element [the element to be pushed to the stack]
+   * @param element_ptr [the element to be pushed to the stack]
    * @param element_size [the size of  element to be pushed to the stack]
    */
   void push(void * element_ptr,Types element_type, size_t element_size);
@@ -53,7 +60,7 @@ public:
 
 
 
-  void pop(void *& element_ptr, Types & element_type);
+  void pop(void *& element_ptr, size_t & element_size, Types & element_type);
   void pop();
 
 
@@ -65,10 +72,10 @@ public:
 
 
 
-  // /**
-  //  * [hand the top element of stack without affecting it]
-  //  */
-  // void top(T & value);
+  /**
+   * [hand the top element of stack without affecting it]
+   */
+  void top(void * &element_ptr,size_t & element_size, Types & element_type);
 
 
   // /**
@@ -109,15 +116,15 @@ public:
   bool isFull();
 
 
-  // /**
-  //  * [a ways to acess all the elements in the stack. the input function will
-  //  * be at this form:
-  //  * void fun(uint32 index, int element)
-  //  {
-  //  // do some thing with index, and element
-  //  }]
-  // */
-  // void traverse(void (*fn)(size_t index, T  element));
+  /**
+   * [a ways to acess all the elements in the stack. the input function will
+   * be at this form:
+   * void fun(uint32 index, int element)
+   {
+   // do some thing with index, and element
+   }]
+  */
+  void traverse(void (*fn)(size_t index, void * element_ptr, size_t element_size, Types element_type));
 
 
   // /**
