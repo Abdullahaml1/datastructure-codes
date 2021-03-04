@@ -10,7 +10,13 @@ int main() {
   l.insert(2, 2);
   l.insert(2, 11);
   l.insert(-1, 3);
-  // l.insert(0, -2);
+  l.push_back(4);
+  l.push_forward(-2);
+  l.insert(0, -3);
+
+  l.clean();
+
+  l.insert(0, 1);
 
   std::cout << l.get(0) << std::endl;
   return 0;

@@ -6,6 +6,7 @@ List<T>::List() {
 
 template <class T>
 List<T>::~List() {
+  clean();
 }
 
 
@@ -95,7 +96,7 @@ Node<T> * List<T>::_get_node(int index) {
   // get the number of steps
   num_steps = _get_steps(index, (int)_size_count);
 
-  // debug -------------------------------------------------------------------------------------
+  // debug ---------------------------------------------------------------------
   std::cout << "num_steps=" << num_steps << std::endl;
 
 
@@ -107,7 +108,7 @@ Node<T> * List<T>::_get_node(int index) {
   std::cout << "node -> prev = " << node_itrator -> prev -> element << std::endl << std::endl;
   node_itrator = node_itrator -> next;
   }
-  // debug end >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  // debug end >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
   node_itrator = _head_node_ptr;
@@ -206,6 +207,64 @@ T List<T>::get(int index) {
   if (node_ptr) {
     return node_ptr -> element;
   }
+
+  return 0;
+}
+
+
+template <class T>
+int List<T>::push_back(T element) {
+  return insert(-1, element);
+}
+
+
+
+
+
+template <class T>
+int List<T>::push_forward(T element) {
+  return insert(0, element);
+}
+
+
+
+template <class T>
+size_t List<T>::size() {
+  return _size_count;
+}
+
+
+
+template <class T>
+bool List<T>::is_empty() {
+  return _head_node_ptr == nullptr;
+}
+
+
+
+template <class T>
+bool List<T>::is_full() {
+  return false;
+}
+
+
+
+template <class T>
+int List<T>::clean() {
+  Node<T> * node_free = nullptr;
+  Node<T> * node_itrator = _head_node_ptr;
+
+  for (int i; i<= (int)_size_count; i++) {
+
+    node_free = node_itrator;
+
+    node_itrator = node_itrator -> next;
+
+    free(node_free);
+  }
+
+  _head_node_ptr = nullptr;
+  _size_count =0;
 
   return 0;
 }
