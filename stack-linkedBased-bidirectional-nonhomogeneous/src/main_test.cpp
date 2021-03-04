@@ -92,7 +92,8 @@ int my_pop(Stack & s, T & element, Types type)
           element = *(T *)ptr;
 
 
-          free(ptr); // free the memory location of the pointer
+          // free(ptr); // free the memory location of the pointer
+          delete (T *)ptr;
         }
       else
         {
@@ -122,7 +123,8 @@ int my_pop_back(Stack & s, T & element, Types type)
           s.pop_back(ptr,size, t_last);
           element = *(T *)ptr;
 
-          free(ptr); // free the memory location of the pointer
+          // free(ptr); // free the memory location of the pointer
+          delete (T *)ptr;
         }
       else
         {
@@ -241,6 +243,12 @@ int main()
   // std::cout << "pop int " << x_pop << std::endl;
   // s.traverse(&print_fn);
   // std::cout << "size = " << s.size() << "\n\n";
+
+
+  std::cout << std::endl;
+  std::string strA = "strA";
+  void * v_ptr = & strA ;
+  std::cout << *(std::string *) v_ptr << std::endl;
 
     return 0;
 }

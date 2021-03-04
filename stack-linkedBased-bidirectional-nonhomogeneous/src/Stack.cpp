@@ -12,6 +12,11 @@ void Stack::initialize()
 
 
 
+Stack::~Stack ()
+{
+  clean();
+}
+
 
 
 
