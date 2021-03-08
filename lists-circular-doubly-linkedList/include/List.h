@@ -76,14 +76,24 @@ private:
    * [getting a pointer to the node by the index]
    *
    * @param index [int value. listSize >= index >= -(listSize +1)
-   * ((Note: we take in account the tail node so  otherwise it will be:
-   * listSize > index >= -listSize ))]
+   * ((Note: we take in account the tail node, as the size of the list is not
+   * counted  otherwise it will be: listSize > index >= -listSize ))]
    *
    * @return [pointer to the desired node,
    *          nullptr if the node does not exist]
    */
-  Node<T> * _get_node(int index);
+  Node<T> * _get_node_with_tail(int index);
 
+
+  /**
+   * [getting a pointer to the node by the index]
+   *
+   * @param index [int value. listSize > index >= -listSize
+   *
+   * @return [pointer to the desired node,
+   *          nullptr if the node does not exist]
+   */
+  Node<T> * _get_node_without_tail(int index);
 
   /**
    * [insert new node between prev node, and next, node]

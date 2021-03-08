@@ -17,7 +17,12 @@ int main() {
   l.clean();
 
   l.insert(0, 1);
+  l.insert(1, 2);
+  l.insert(-1, 3);
+  l.push_back(4);
+  l.push_forward(-1);
 
-  std::cout << l.get(0) << std::endl;
+  std::cout << l.get(-1) << std::endl;
+  std::cout << "List size=" << l.size() << std::endl;
   return 0;
 }

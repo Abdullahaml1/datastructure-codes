@@ -88,10 +88,62 @@ int List<T>::_insert_node(Node<T>* new_node, Node<T>* prev_node){
 
 
 template <class T>
-Node<T> * List<T>::_get_node(int index) {
+Node<T> * List<T>::_get_node_with_tail(int index) {
 
   int num_steps =0;
   Node<T> * node_itrator = nullptr;
+
+  // get the number of steps
+  num_steps = _get_steps(index, (int)_size_count+1);
+
+  // debug ---------------------------------------------------------------------
+  std::cout << "num_steps=" << num_steps << std::endl;
+
+
+  node_itrator = _head_node_ptr;
+
+  for (int i=0; i <= (int)_size_count; i++) {
+  std::cout << "node -> elemenet = " << node_itrator -> element << std::endl;
+  std::cout << "node -> next = " << node_itrator -> next -> element << std::endl;
+  std::cout << "node -> prev = " << node_itrator -> prev -> element << std::endl << std::endl;
+  node_itrator = node_itrator -> next;
+  }
+  // debug end >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+  node_itrator = _head_node_ptr;
+  //if steps +ve walk in the next direction
+  if (num_steps >= 0) {
+
+    for (int i=0; i<num_steps; i++) {
+      node_itrator = node_itrator -> next;
+    }
+  }
+
+  //if steps -ve walk in the prev direction but consider the empty node at the end
+  else {
+    for (int i=0; i>num_steps; i--) {
+      node_itrator = node_itrator -> prev;
+    }
+  }
+
+  return node_itrator;
+}
+
+
+
+
+
+template <class T>
+Node<T> * List<T>::_get_node_without_tail(int index) {
+
+  int num_steps =0;
+  Node<T> * node_itrator = nullptr;
+
+
+  if (_head_node_ptr == nullptr) {
+    return nullptr;
+  }
 
   // get the number of steps
   num_steps = _get_steps(index, (int)_size_count);
@@ -122,7 +174,7 @@ Node<T> * List<T>::_get_node(int index) {
 
   //if steps -ve walk in the prev direction but consider the empty node at the end
   else {
-    // node_itrator = node_itrator -> prev; // bypassing the tail node
+    node_itrator = node_itrator -> prev; // bypassing the tail node
 
     for (int i=0; i>num_steps; i--) {
       node_itrator = node_itrator -> prev;
@@ -131,6 +183,7 @@ Node<T> * List<T>::_get_node(int index) {
 
   return node_itrator;
 }
+
 
 
 
@@ -187,7 +240,7 @@ int List<T>::insert(int index, T element) {
 
 
   // getting previous node of our desired index
-  Node<T> * prev_node = _get_node(index -1);
+  Node<T> * prev_node = _get_node_with_tail(index -1);
 
   _insert_node(new_node, prev_node);
   _size_count ++;
@@ -202,7 +255,7 @@ int List<T>::insert(int index, T element) {
 template <class T>
 T List<T>::get(int index) {
 
-  Node<T> * node_ptr = _get_node(index);
+  Node<T> * node_ptr = _get_node_without_tail(index);
 
   if (node_ptr) {
     return node_ptr -> element;
