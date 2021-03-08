@@ -22,6 +22,8 @@ int main() {
   l.push_back(4);
   l.push_forward(-1);
 
+  std::cout << "retrieved=" << l.retrieve(3) <<std::endl;
+
   std::cout << l.get(-1) << std::endl;
   std::cout << "List size=" << l.size() << std::endl;
   return 0;

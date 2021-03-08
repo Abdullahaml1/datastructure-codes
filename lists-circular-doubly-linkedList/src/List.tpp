@@ -281,6 +281,40 @@ int List<T>::push_forward(T element) {
 
 
 
+
+template <class T>
+T List<T>::retrieve(int index) {
+
+  Node<T> * del_node = _get_node_without_tail(index); // the node to be deleted
+  T element = del_node -> element;
+
+  // attaching the previous node of the deleted node to
+  // the next node of the deleted node
+  del_node -> prev -> next = del_node -> next;
+
+  // attaching the next node of the deleted node to
+  // the previous node of the deleted node
+  del_node -> next -> prev = del_node -> prev;
+
+
+  if (index ==0) {
+    _head_node_ptr = del_node -> next;
+  }
+
+
+  // deleting the node
+  free(del_node);
+
+  _size_count --;
+
+  return element;
+}
+
+
+
+
+
+
 template <class T>
 size_t List<T>::size() {
   return _size_count;
