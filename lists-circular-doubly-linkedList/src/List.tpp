@@ -1,3 +1,7 @@
+// #define DEBUG_INSERT_NODE
+
+
+
 template <class T>
 List<T>::List() {
   initialize();
@@ -57,19 +61,23 @@ int List<T>::_get_steps(int index, int lenght) {
 template <class T>
 int List<T>::_insert_node(Node<T>* new_node, Node<T>* prev_node){
 
+#ifdef DEBUG_INSERT_NODE
   std::cout << "The node we got before insertion\n";
   std::cout << "node -> elemenet = " << prev_node -> element << std::endl;
   std::cout << "node -> next = " << prev_node -> next -> element << std::endl;
   std::cout << "node -> prev = " << prev_node -> prev -> element << std::endl << std::endl;
-
+#endif
 
   // attaching the two ends of the new node
   new_node -> prev = prev_node;
   new_node -> next = prev_node -> next;
+
+#ifdef DEBUG_INSERT_NODE
   std::cout << "Our new node\n";
   std::cout << "node -> elemenet = " << new_node -> element << std::endl;
   std::cout << "node -> next = " << new_node -> next -> element << std::endl;
   std::cout << "node -> prev = " << new_node -> prev -> element << std::endl << std::endl;
+#endif
 
 
   // pointing the next node to the new node
@@ -78,40 +86,31 @@ int List<T>::_insert_node(Node<T>* new_node, Node<T>* prev_node){
 
   // pointing the previous node to the new node
   prev_node -> next = new_node;
+
+#ifdef DEBUG_INSERT_NODE
   std::cout << "The node we got after insertion\n";
   std::cout << "node -> elemenet = " << prev_node -> element << std::endl;
   std::cout << "node -> next = " << prev_node -> next -> element << std::endl;
   std::cout << "node -> prev = " << prev_node -> prev -> element << std::endl << std::endl;
+#endif
 
   return 0;
 }
+
+
+
 
 
 template <class T>
 Node<T> * List<T>::_get_node_with_tail(int index) {
 
   int num_steps =0;
-  Node<T> * node_itrator = nullptr;
+  Node<T> * node_itrator = _head_node_ptr;
 
   // get the number of steps
   num_steps = _get_steps(index, (int)_size_count+1);
 
-  // debug ---------------------------------------------------------------------
-  std::cout << "num_steps=" << num_steps << std::endl;
 
-
-  node_itrator = _head_node_ptr;
-
-  for (int i=0; i <= (int)_size_count; i++) {
-  std::cout << "node -> elemenet = " << node_itrator -> element << std::endl;
-  std::cout << "node -> next = " << node_itrator -> next -> element << std::endl;
-  std::cout << "node -> prev = " << node_itrator -> prev -> element << std::endl << std::endl;
-  node_itrator = node_itrator -> next;
-  }
-  // debug end >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-
-  node_itrator = _head_node_ptr;
   //if steps +ve walk in the next direction
   if (num_steps >= 0) {
 
@@ -138,8 +137,7 @@ template <class T>
 Node<T> * List<T>::_get_node_without_tail(int index) {
 
   int num_steps =0;
-  Node<T> * node_itrator = nullptr;
-
+  Node<T> * node_itrator = _head_node_ptr;
 
   if (_head_node_ptr == nullptr) {
     return nullptr;
@@ -148,22 +146,6 @@ Node<T> * List<T>::_get_node_without_tail(int index) {
   // get the number of steps
   num_steps = _get_steps(index, (int)_size_count);
 
-  // debug ---------------------------------------------------------------------
-  std::cout << "num_steps=" << num_steps << std::endl;
-
-
-  node_itrator = _head_node_ptr;
-
-  for (int i=0; i <= (int)_size_count; i++) {
-  std::cout << "node -> elemenet = " << node_itrator -> element << std::endl;
-  std::cout << "node -> next = " << node_itrator -> next -> element << std::endl;
-  std::cout << "node -> prev = " << node_itrator -> prev -> element << std::endl << std::endl;
-  node_itrator = node_itrator -> next;
-  }
-  // debug end >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-
-  node_itrator = _head_node_ptr;
   //if steps +ve walk in the next direction
   if (num_steps >= 0) {
 
@@ -202,7 +184,7 @@ int List<T>::insert(int index, T element) {
 
 
   // first insertion
-  if (_head_node_ptr == nullptr && index ==0) {
+  if (_head_node_ptr == nullptr && (index ==0 || index==-1)) {
 
     // Allocate the tail node
     Node<T> * tail_node = (Node<T> *)malloc(sizeof(Node<T>));
@@ -228,7 +210,7 @@ int List<T>::insert(int index, T element) {
     return 0; //sucess
   }
   // for the 0 index
-  else if (index ==0) {
+  else if (index ==0 || index==-(int)(_size_count +1)) {
 
     _insert_node(new_node, _head_node_ptr -> prev);
     _head_node_ptr = new_node;
@@ -246,7 +228,6 @@ int List<T>::insert(int index, T element) {
   _size_count ++;
 
   return 0; //sucess
-
 }
 
 
@@ -263,6 +244,9 @@ T List<T>::get(int index) {
 
   return 0;
 }
+
+
+
 
 
 template <class T>
@@ -288,24 +272,30 @@ T List<T>::retrieve(int index) {
   Node<T> * del_node = _get_node_without_tail(index); // the node to be deleted
   T element = del_node -> element;
 
-  // attaching the previous node of the deleted node to
-  // the next node of the deleted node
-  del_node -> prev -> next = del_node -> next;
+  if (_size_count == 1 && (index ==0 || index ==-1)) {
+    clean();
+  }
+  else {
 
-  // attaching the next node of the deleted node to
-  // the previous node of the deleted node
-  del_node -> next -> prev = del_node -> prev;
+    // attaching the previous node of the deleted node to
+    // the next node of the deleted node
+    del_node -> prev -> next = del_node -> next;
+
+    // attaching the next node of the deleted node to
+    // the previous node of the deleted node
+    del_node -> next -> prev = del_node -> prev;
 
 
-  if (index ==0) {
-    _head_node_ptr = del_node -> next;
+    if (index ==0) {
+      _head_node_ptr = del_node -> next;
+    }
+
+    // deleting the node
+    free(del_node);
+
+      _size_count --;
   }
 
-
-  // deleting the node
-  free(del_node);
-
-  _size_count --;
 
   return element;
 }
@@ -355,3 +345,24 @@ int List<T>::clean() {
 
   return 0;
 }
+
+
+
+
+
+
+template <class T>
+void List<T>::debug_print_list() {
+
+  Node<T> * node_itrator = _head_node_ptr;
+  if (!_head_node_ptr)
+    return;
+
+  for (int i=0; i <= (int)_size_count; i++) {
+    std::cout << "node -> elemenet = " << node_itrator -> element << std::endl;
+    std::cout << "node -> next = " << node_itrator -> next -> element << std::endl;
+    std::cout << "node -> prev = " << node_itrator -> prev -> element << std::endl << std::endl;
+    node_itrator = node_itrator -> next;
+  }
+}
+

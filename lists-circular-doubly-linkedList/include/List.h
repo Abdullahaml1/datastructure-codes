@@ -54,6 +54,8 @@ public:
 
   int clean();
 
+  void debug_print_list();
+
 private:
 
   /**
