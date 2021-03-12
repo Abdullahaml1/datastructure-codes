@@ -7,32 +7,6 @@ int main() {
   List<int> l ;
   int i=0;
 
-  // l.insert(0, 1);
-  // l.insert(0, -1);
-  // l.insert(2, 2);
-  // l.insert(2, 11);
-  // l.insert(-1, 3);
-  // l.push_back(4);
-  // l.push_forward(-2);
-  // l.insert(0, -3);
-
-  // l.clean();
-
-  // l.insert(0, 1);
-  // l.insert(1, 2);
-  // l.insert(-1, 3);
-  // l.push_back(4);
-  // l.push_forward(-1);
-
-  // l.clean();
-
-  // l.push_forward(1);
-
-  // std::cout << "retrieved=" << l.retrieve(-1) <<std::endl;
-
-  // std::cout << l.get(-1) << std::endl;
-  // std::cout << "List size=" << l.size() << std::endl;
-
 
   std::cout << "Insert test:\n";
 
@@ -126,7 +100,7 @@ int main() {
   l.insert(0, 1);
   int rand_int =0;
   int rand_i =0;
-  for (int j=0; j<100000; j++) {
+  for (int j=0; j<5; j++) {
     rand_int = rand();
 
     if (rand_int >=0) {
@@ -140,6 +114,134 @@ int main() {
     std::cout << "l[" << rand_i << "]=" << l.get(rand_i) << std::endl;
     std::cout << "List size=" << l.size() << "\n\n";
   }
+  l.debug_print_list();
+  std::cout << "List size=" << l.size() << "\n\n";
+
+  std::cout << "Thanks to ALLAH the insert test was finished successfully \n";
+
+
+  //----------------------------------------------------------------------------
+
+  std::cout << "retrieve Test\n";
+  l.clean(); std::cout << "List cleaned !\n";
+  i =0;
+  l.insert(i, 1);
+  l.debug_print_list();
+  std::cout << "retrieve(" << i << ")=" << l.retrieve(i) << std::endl;
+  std::cout << "List size=" << l.size() << "\n\n";
+
+
+
+  i =-1;
+  l.insert(i, 1);
+  l.debug_print_list();
+  std::cout << "retrieve(" << i << ")=" << l.retrieve(i) << std::endl;
+  std::cout << "List size=" << l.size() << "\n\n";
+
+
+  for(int j=0; j<10; j++) {
+    l.push_back(j);
+  }
+  l.debug_print_list();
+
+
+  i =-1;
+  std::cout << "retrieve(" << i << ")=" << l.retrieve(i) << std::endl;
+  l.debug_print_list();
+  std::cout << "List size=" << l.size() << "\n\n";
+
+
+  i =0;
+  std::cout << "retrieve(" << i << ")=" << l.retrieve(i) << std::endl;
+  l.debug_print_list();
+  std::cout << "List size=" << l.size() << "\n\n";
+
+
+
+  i =(int)l.size()-1;
+  std::cout << "retrieve(" << i << ")=" << l.retrieve(i) << std::endl;
+  l.debug_print_list();
+  std::cout << "List size=" << l.size() << "\n\n";
+
+
+  i =-(int)l.size();
+  std::cout << "retrieve(" << i << ")=" << l.retrieve(i) << std::endl;
+  l.debug_print_list();
+  std::cout << "List size=" << l.size() << "\n\n";
+
+
+  i =-4;
+  std::cout << "retrieve(" << i << ")=" << l.retrieve(i) << std::endl;
+  l.debug_print_list();
+  std::cout << "List size=" << l.size() << "\n\n";
+
+
+  i =3;
+  std::cout << "retrieve(" << i << ")=" << l.retrieve(i) << std::endl;
+  l.debug_print_list();
+  std::cout << "List size=" << l.size() << "\n\n";
+
+  //----------------------------------------------------------------------------
+
+  std::cout << "Edit Test\n";
+  l.clean(); std::cout << "List cleaned !\n";
+  i = 0;
+  l.push_forward(1);
+  std::cout << "old edit(" << i << ")=" << l.edit(i, 88) << std::endl;
+  l.debug_print_list();
+  std::cout << "List size=" << l.size() << "\n\n";
+
+
+  l.clean(); std::cout << "List cleaned !\n";
+  i = -1;
+  l.push_back(1);
+  std::cout << "old edit(" << i << ")=" << l.edit(i, 88) << std::endl;
+  l.debug_print_list();
+  std::cout << "List size=" << l.size() << "\n\n";
+
+
+
+  l.clean(); std::cout << "List cleaned !\n";
+  for(int j=0; j<10; j++) {
+    l.push_back(j);
+  }
+  l.debug_print_list();
+
+
+  i = 0;
+  std::cout << "old edit(" << i << ")=" << l.edit(i, 88) << std::endl;
+  l.debug_print_list();
+  std::cout << "List size=" << l.size() << "\n\n";
+
+
+
+  i = -1;
+  std::cout << "old edit(" << i << ")=" << l.edit(i, 88) << std::endl;
+  l.debug_print_list();
+  std::cout << "List size=" << l.size() << "\n\n";
+
+
+  i = (int)l.size() -1;
+  std::cout << "old edit(" << i << ")=" << l.edit(i, 777) << std::endl;
+  l.debug_print_list();
+  std::cout << "List size=" << l.size() << "\n\n";
+
+
+  i = -(int)l.size();
+  std::cout << "old edit(" << i << ")=" << l.edit(i, 777) << std::endl;
+  l.debug_print_list();
+  std::cout << "List size=" << l.size() << "\n\n";
+
+
+
+  i = 5;
+  std::cout << "old edit(" << i << ")=" << l.edit(i, 777) << std::endl;
+  l.debug_print_list();
+  std::cout << "List size=" << l.size() << "\n\n";
+
+
+  i = -4;
+  std::cout << "old edit(" << i << ")=" << l.edit(i, 777) << std::endl;
   l.debug_print_list();
   std::cout << "List size=" << l.size() << "\n\n";
 

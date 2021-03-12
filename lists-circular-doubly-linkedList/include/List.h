@@ -40,6 +40,9 @@ public:
   T get(int index);
 
 
+  T edit(int index, T nex_element);
+
+
   T retrieve(int index);
 
 

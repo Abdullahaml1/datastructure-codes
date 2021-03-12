@@ -247,6 +247,23 @@ T List<T>::get(int index) {
 
 
 
+template <class T>
+T List<T>::edit(int index, T new_element) {
+  Node<T> * node_ptr = _get_node_without_tail(index);
+  T old_element;
+
+  if (node_ptr == nullptr) {
+    return 0;
+  }
+
+  old_element = node_ptr -> element;
+  node_ptr -> element = new_element;
+
+  return old_element;
+}
+
+
+
 
 
 template <class T>
@@ -286,7 +303,7 @@ T List<T>::retrieve(int index) {
     del_node -> next -> prev = del_node -> prev;
 
 
-    if (index ==0) {
+    if (index ==0 || index == -(int)_size_count) {
       _head_node_ptr = del_node -> next;
     }
 
