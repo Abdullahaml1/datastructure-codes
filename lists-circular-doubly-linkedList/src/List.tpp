@@ -245,6 +245,14 @@ T List<T>::get(int index) {
   return 0;
 }
 
+template <class T>
+T& List<T>::operator[](int index) {
+  Node<T> * node_ptr = _get_node_without_tail(index);
+
+
+  return node_ptr -> element;
+}
+
 
 
 template <class T>

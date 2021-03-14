@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <iterator>
 #include <iostream>
 
 template <class T>
@@ -20,6 +21,108 @@ template <class T>
 class List {
 
 public:
+
+  //references for iterators:
+  //https://www.cplusplus.com/reference/iterator/iterator/
+  //https://en.cppreference.com/w/cpp/language/operators
+  class iterator : public std::iterator<std::bidirectional_iterator_tag, T> {
+
+    Node<T> * node_ptr;
+
+  public:
+    iterator(Node<T> * _node_ptr) :node_ptr(_node_ptr){};
+
+    iterator(const iterator& itr): node_ptr(itr.node_ptr){};
+
+    ~iterator(){};
+
+    T& operator*() {return node_ptr -> element;};
+
+    // prefix increment
+    //prefix increment means increment then return (we will return the
+    // incremented value);
+    iterator& operator++() {
+      node_ptr = node_ptr-> next;
+      return *this;
+    };
+
+
+    //postfix increment
+    //postfix increment means return then increment (we will the old value);
+    //int argument is ignored
+    iterator operator++(int) {
+      iterator old_itr(*this); // old iterator
+      operator++(); // node_ptr -> next (increment our iterator)
+      return old_itr;
+    };
+
+    // prefix decrement
+    //prefix decrement means decrement then return (we will return the
+    // decremented value);
+    iterator& operator--() {
+      node_ptr = node_ptr-> prev;
+      return *this;
+    };
+
+    inline bool operator==(const iterator & itr) const {
+      return itr.node_ptr == node_ptr;
+    };
+
+
+    inline bool operator!=(const iterator & itr) const {
+      return itr.node_ptr != node_ptr;
+    };
+
+    //ex: itr+=3
+    iterator& operator+=(int count) {
+      if (count >=0) {
+        for(int i=0; i<count; i++) {
+          node_ptr = node_ptr -> next;
+        }
+      }
+      else {
+        for(int i=count; i<0; i++) {
+          node_ptr = node_ptr -> prev;
+        }
+      }
+      return *this;
+    };
+
+
+    //ex: itr+3
+    friend iterator operator+(iterator lhs_itr, int rhs_count) {
+      lhs_itr += rhs_count; // lhs_itr.operator+=(rhs_count)
+      return lhs_itr;
+    };
+
+
+    //ex: itr-=3
+    iterator& operator-=(int count) {
+      return operator+=(-count);
+    };
+
+
+    //ex: itr-3
+    friend iterator operator-(iterator lhs_itr, int rhs_count) {
+      return operator+(lhs_itr, -rhs_count);
+    };
+
+
+
+
+    //postfix decrement
+    //postfix decrement means return then decrement (we will the old value);
+    //int argument is ignored
+    iterator operator--(int) {
+      iterator old_itr(*this); // old iterator
+      operator--(); // node_ptr -> next (decrement our iterator)
+      return old_itr;
+    };
+
+
+
+  };
+
 
   List();
 
@@ -38,6 +141,7 @@ public:
 
 
   T get(int index);
+  T& operator[](int index) ;
 
 
   T edit(int index, T nex_element);
@@ -54,10 +158,17 @@ public:
 
   bool is_full();
 
-
   int clean();
 
   void debug_print_list();
+
+  iterator begin() {
+      return iterator(_head_node_ptr);
+  };
+
+  iterator end(){
+      return iterator(_head_node_ptr -> prev); // last node
+  };
 
 private:
 

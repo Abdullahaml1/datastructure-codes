@@ -69,26 +69,26 @@ int main() {
 
 
   std::cout << "Max positive and negative limits\n";
-  i =-l.size(); // 1
+  i =-(int)l.size(); // 1
   l.insert(i, 111);
   l.debug_print_list();
   std::cout << "l[" << i << "]=" << l.get(i) << std::endl;
   std::cout << "List size=" << l.size() << "\n\n";
 
-  i =-(l.size()+1); // 0
+  i =-(int)(l.size()+1); // 0
   l.insert(i, 10000);
   l.debug_print_list();
   std::cout << "l[" << i << "]=" << l.get(i) << std::endl;
   std::cout << "List size=" << l.size() << "\n\n";
 
 
-  i =l.size() -1;
+  i =(int)l.size() -1;
   l.insert(i, 777);
   l.debug_print_list();
   std::cout << "l[" << i << "]=" << l.get(i) << std::endl;
   std::cout << "List size=" << l.size() << "\n\n";
 
-  i =l.size();
+  i =(int)l.size();
   l.insert(i, 888);
   l.debug_print_list();
   std::cout << "l[" << i << "]=" << l.get(i) << std::endl;
@@ -104,10 +104,10 @@ int main() {
     rand_int = rand();
 
     if (rand_int >=0) {
-      rand_i = rand_int % (l.size() +1);
+      rand_i = rand_int % ((int)l.size() +1);
     }
     else {
-      rand_i = rand_int % (l.size() +2);
+      rand_i = rand_int % ((int)l.size() +2);
     }
 
     l.insert(rand_i, rand_int);
@@ -244,6 +244,47 @@ int main() {
   std::cout << "old edit(" << i << ")=" << l.edit(i, 777) << std::endl;
   l.debug_print_list();
   std::cout << "List size=" << l.size() << "\n\n";
+
+  i = 3;
+  std::cout << "l[" << i << "]=" << l[i] << std::endl;
+
+  l[3] = 6666;
+  std::cout << "l[" << i << "]=" << l[i] << std::endl;
+  l.debug_print_list();
+
+
+  std::cout << "iterator to loop throw the list\n";
+
+
+  l.clean(); std::cout << "List cleaned !\n";
+  for(int j=0; j<10; j++) {
+    l.push_back(j);
+  }
+  l.debug_print_list();
+
+
+  for(List<int>::iterator itr=l.begin(); itr!= l.end(); itr++) {
+    std::cout << *itr << "  ";
+  }
+  std::cout <<std::endl;
+
+
+  std::cout << "iterator to loop throw the list\n";
+  for(List<int>::iterator itr=l.begin()+3; itr!= l.end()-2; itr++) {
+    std::cout << *itr << "  ";
+  }
+  std::cout <<std::endl;
+
+  List<int>::iterator itr = l.begin();
+  i=-2;
+  itr +=i;
+  std::cout << "*(" << i << ")=" << *itr << std::endl;
+
+
+  itr = l.end();
+  i=4;
+  itr -=i;
+  std::cout << "*(" << -i << ")=" << *itr << std::endl;
 
 
   return 0;
