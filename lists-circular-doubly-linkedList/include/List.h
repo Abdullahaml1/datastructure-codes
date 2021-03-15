@@ -131,41 +131,113 @@ public:
 
   void initialize();
 
+  /**
+   * [insert element in the list of a given index]
+   * @param index [-(size() +1) >= index <= size()
+   *               -1 is last element.]
+   * @return [0 if the element is inserted successfully in the list
+   *           otherwise will return error code ]
+   * Ex: l.insert(-3, element) the element will be in position 3 from the
+   * last element
+   */
   int insert(int index, T element);
 
-
+  /**
+   * [insert element at the end of the list]
+   * @return [0 if the element is inserted successfully in the list
+   *           otherwise will return error code ]
+   * Ex: push_back(element) is the same as insert(-1, element)
+   * last element
+   */
   int push_back(T element);
 
 
+  /**
+   * [insert element at the start of the list]
+   * @return [0 if the element is inserted successfully in the list
+   *           otherwise will return error code ]
+   * Ex: push_forward(element) is the same as insert(0, element)
+   * last element
+   */
   int push_forward(T element);
 
 
+  /**
+   * [return the element from the list]
+   * @param index [-size()  >= index <= size() -1
+   *               -1 is last element.]
+   */
   T get(int index);
-  T& operator[](int index) ;
 
 
+  /**
+   * [edit the element at the given index and the return the old element]
+   * @param index [-size()  >= index <= size() -1
+   *               -1 is last element.]
+   * @return [old element]
+   */
   T edit(int index, T nex_element);
 
 
+  /**
+   * [return a reference to the element at the given index
+   * Ex:
+   * l[3] = 800; // will edit the value of element of index 3 to 800
+   * int x = l[3]; // will copy element at index 3 to x
+   * x = 99 // will no affect the element at index 3
+   * int& y= l[3]; //if we change y, l[3] will also change]
+   * @param index [-size()  >= index <= size() -1
+   *               -1 is last element.]
+   * @return [a reference to the element at thet index]
+   */
+  T& operator[](int index) ;
+
+
+  /**
+   * [delete the element at the given index and return the element value]
+   * @param index [-size()  >= index <= size() -1
+   *               -1 is last element.]
+   * @return [the element at the given index]
+   */
   T retrieve(int index);
 
 
+  /**
+   * @return [the size of the list]
+   */
   size_t size();
 
 
+  /**
+   * @return [true if the list is empty, false otherwise]
+   */
   bool is_empty();
 
 
   bool is_full();
 
+
+  /**
+   * [cleans the list]
+   * @return [0 the cleaning process finished successfully,
+   *          error code otherwise]
+   */
   int clean();
 
   void debug_print_list();
 
+
+  /**
+   * @return [the begin iterator of the list]
+   */
   iterator begin() {
       return iterator(_head_node_ptr);
   };
 
+
+  /**
+   * @return [the end iterator of the list]
+   */
   iterator end(){
       return iterator(_head_node_ptr -> prev); // last node
   };
