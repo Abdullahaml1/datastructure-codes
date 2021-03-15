@@ -44,11 +44,11 @@ TODO
 A circular doubly linked list but with Addition features: 
 * loop throw N/2 while getting the node  by selecting the shortest path either from the start of the list or the end of the list;
 * template implemented we can use list of any data type
-* supports negative and positive indcies -1 means the end of the list, and 0 means the start of the list 
+* supports negative and positive indcies: -1 means the end of the list, and 0 means the start of the list 
 ```c++
 int x = l[-3];
 ```
-* supports std::iterator which will reduce time greatly comparing the normal way. theoriatically looping throw iterator is $\theta$(N), and looping throw indexing ie: `l.get(i)` or `l[i]` is $\theta$(N<sup>2</sup>). But in practice normal way of looping take more more than N<sup>2</sup> due to memory.
+* supports std::iterator which will reduce time greatly comparing the normal way. theoretically looping throw iterator is bi theta of (N), and looping throw indexing ie: `l.get(i)` or `l[i]` is big theta of (N<sup>2</sup>). But in practice normal way of looping take more more than N<sup>2</sup> due to memory.
 ```c++
 #include <iostream>
 
