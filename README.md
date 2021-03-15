@@ -10,6 +10,7 @@
 
 
 # Polish Notation Converter and Evaluator
+Done docs is remained
 TODO 
 
 
@@ -37,3 +38,59 @@ But if end_pointer = 9, at the next append end_pointer = (1+9) %10 = 0. **Which 
 
 
 TODO
+
+
+# list-circular-doubly-linkedList
+A circular doubly linked list but with Addition features: 
+* loop throw N/2 while getting the node  by selecting the shortest path either from the start of the list or the end of the list;
+* template implemented we can use list of any data type
+* supports negative and positive indcies -1 means the end of the list, and 0 means the start of the list 
+```c++
+int x = l[-3];
+```
+* supports std::iterator which will reduce time greatly comparing the normal way. theoriatically looping throw iterator is $\theta$(N), and looping throw indexing ie: `l.get(i)` or `l[i]` is $\theta$(N<sup>2</sup>). But in practice normal way of looping take more more than N<sup>2</sup> due to memory.
+```c++
+#include <iostream>
+
+#include "List.h"
+// #define ITERATOR
+#define NORMAL
+
+int main() {
+
+  List<long int> l;
+  long int max = 100000;
+  long int count =0;
+
+  for (long int i=0; i<max; i++) {
+    l.push_back(i);
+  }
+  std::cout << "size=" <<l.size() << std::endl;
+
+#ifdef ITERATOR
+  std::cout << "Loop throw iterator test\n";
+  count =0;
+  for(List<long int>::iterator itr = l.begin(); itr !=l.end(); ++itr) {
+    *itr -=1;
+    count ++;
+  }
+  std::cout << "iterator loop finished with count=" << count << std::endl;
+#endif
+
+
+
+#ifdef NORMAL
+  std::cout << "Loop throw normal way test\n";
+  count =0;
+  for(long int i=0; i<max; i++) {
+    l[i] -=1;
+    count ++;
+  }
+  std::cout << "Normal loop finished with count=" << count << std::endl;
+#endif
+
+
+  return 0;
+}
+
+```
