@@ -1,3 +1,8 @@
+#define SPACING 4
+
+
+
+
 template <class K, class T>
 BinarySearchTree<K, T>::BinarySearchTree() {
   initialize();
@@ -100,44 +105,63 @@ int BinarySearchTree<K,T>::insert(K key, T element) {
 
 template<class K, class T>
 void BinarySearchTree<K,T>::draw_tree() {
+
   std::vector<std::string> levels_vec;
+  std::vector<int> index_vec;
+  int offset =0, step =0;
 
-  _fill_levels(_root_ptr, 0, levels_vec);
+  _fill_levels(_root_ptr, 0, 0, index_vec, levels_vec);
 
-  int offset = levels_vec[levels_vec.size()-1].size() / 2 + 1;
-  std::cout << offset << std::endl;
-  int step = levels_vec[0].size();
-
-  for(auto itr=levels_vec.begin(); itr != levels_vec.end(); ++itr) {
-    std::cout << std::string(offset, ' ') << *itr << std::endl;
-    offset -=step;
+  if (! levels_vec.empty()) {
+    step = (int)levels_vec[0].size() /2;
   }
+  offset = (int)std::pow(2, (float)levels_vec.size()-2) * SPACING * 2 -4;
+  std::cout << "offset=" << offset << std::endl;
+  std::cout << "step =" << step << std::endl;
+
+
+  for(auto itr=levels_vec.begin(); itr != levels_vec.end()-1; ++itr) {
+    std::cout << std::string(offset, ' ') << *itr << std::endl;
+    step = step+step/2;
+    offset -= step;
+  }
+  std::cout << *(levels_vec.end()-1) << std::endl; // the last element
 }
 
 
 
 
 template <class K, class T>
-void BinarySearchTree<K,T>::_fill_levels(Vertex<K,T>* tree, int level,
+void BinarySearchTree<K,T>::_fill_levels(Vertex<K,T>* tree,
+                                         int level, int pos,
+                                         std::vector<int>&index_vec,
                                          std::vector<std::string> &vec) {
   // VLR: vertex, left, right
   if (tree != nullptr) {
+
+
     //V
     std::ostringstream oss;
-    if(level < vec.size()) {
-      oss << std::string(5,' ') << "[" << tree -> key << "]=" << tree -> element;
-      vec[level] += oss.str();
+    oss << tree -> key << "=>" << tree -> element << std::string(SPACING, ' ');
+
+    if(level < (int)vec.size()) {
+      int offset=0;
+
+      offset = pos - index_vec[level] -1;
+
+      vec[level] += std::string(2*offset*SPACING, ' ') + oss.str();
+      index_vec[level] = pos; // keeping track of last position
     }
     else {
-      oss << "[" << tree -> key << "]=" << tree -> element;
-      vec.push_back(oss.str());
+      vec.push_back(std::string(2*pos*SPACING, ' ') + oss.str());
+      index_vec.push_back(pos);
     }
 
     //L
-    _fill_levels(tree -> left, level+1, vec);
+    _fill_levels(tree -> left, level+1, 2*pos, index_vec, vec);
 
     //R
-    _fill_levels(tree -> right, level+1, vec);
+    _fill_levels(tree -> right, level+1, 2*pos+1, index_vec, vec);
   }
 }
 

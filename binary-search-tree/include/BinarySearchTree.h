@@ -8,6 +8,7 @@
 #include <iostream>
 #include <iomanip> // for std::setw(n)
 #include <string>
+#include <cmath>
 
 template <class K, class T>
 struct Vertex {
@@ -54,7 +55,9 @@ private:
 
   int (*_comp)(K, K);
 
-  void _fill_levels(Vertex<K,T>* tree, int level,
+  void _fill_levels(Vertex<K,T>* tree,
+                   int level, int pos,
+                   std::vector<int>&index_vec,
                    std::vector<std::string> &vec);
 };
 
