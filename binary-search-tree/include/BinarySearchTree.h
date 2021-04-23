@@ -58,8 +58,13 @@ private:
   void _fill_levels(Vertex<K,T>* tree,
                    int level, int pos,
                    std::vector<int>&index_vec,
-                   std::vector<std::string> &vec);
+                    std::vector<std::vector<std::string>> &vec);
+
+  std::string _draw_element(K key, T element);
+
+  std::string _dray_empty_element();
 };
+
 
 
 #include "BinarySearchTree.tpp"

@@ -1,4 +1,4 @@
-#define SPACING 4
+#define SPACING 2
 
 
 
@@ -102,30 +102,77 @@ int BinarySearchTree<K,T>::insert(K key, T element) {
 
 
 
+template <class K, class T>
+std::string BinarySearchTree<K,T>::_draw_element(K key, T element) {
+  std::ostringstream oss;
+  int offset =0;
+
+  oss << key << element;
+  offset = (SPACING - oss.str().size() - 4);
+  oss.str("");
+
+  oss << '[' << std::string(offset/2, ' ') << key << "=>"  << element;
+  oss << std::string(offset/2 + offset%2,' ') << ']';
+
+  return oss.str();
+}
+
+
+
 
 template<class K, class T>
 void BinarySearchTree<K,T>::draw_tree() {
 
-  std::vector<std::string> levels_vec;
+  std::vector<std::vector<std::string>> levels_vec;
   std::vector<int> index_vec;
-  int offset =0, step =0;
+  // int offset =0, step =0;
 
   _fill_levels(_root_ptr, 0, 0, index_vec, levels_vec);
 
-  if (! levels_vec.empty()) {
-    step = (int)levels_vec[0].size() /2;
-  }
-  offset = (int)std::pow(2, (float)levels_vec.size()-2) * SPACING * 2 -4;
-  std::cout << "offset=" << offset << std::endl;
-  std::cout << "step =" << step << std::endl;
+  // if (! levels_vec.empty()) {
+  //   step = (int)levels_vec[0].size() /2;
+  // }
+  // offset = (int)std::pow(2, (float)levels_vec.size()-2) * SPACING * 2 -4;
+  // std::cout << "offset=" << offset << std::endl;
+  // std::cout << "step =" << step << std::endl;
 
 
-  for(auto itr=levels_vec.begin(); itr != levels_vec.end()-1; ++itr) {
-    std::cout << std::string(offset, ' ') << *itr << std::endl;
-    step = step+step/2;
-    offset -= step;
+  std::vector<std::string> str_tree_vec (levels_vec.size());
+  int max_level_count = (int)std::pow(2, (float)levels_vec.size());
+  int level =(int)levels_vec.size()-1;
+  int space =2;
+  int offset=0;
+  int element_size=5;
+
+  for(auto itr=levels_vec.rbegin(); itr != levels_vec.rend(); ++itr) {
+    str_tree_vec[level] = std::string(offset, ' ');
+    for (auto level_itr=(*itr).begin(); level_itr != (*itr).end(); level_itr++) {
+      str_tree_vec[level] += *level_itr + std::string(space, ' ');
+    }
+    offset = (element_size + space)/2;
+    space = 2*element_size + space - offset;
+
+    level --;
+    max_level_count/=2;
   }
-  std::cout << *(levels_vec.end()-1) << std::endl; // the last element
+
+  // for(auto itr=levels_vec.begin(); itr != levels_vec.end(); itr++) {
+  //   for (auto level_itr=(*itr).begin(); level_itr != (*itr).end(); level_itr++) {
+  //     std::cout << *level_itr << ", ";
+  //   }
+  //   std::cout <<std::endl;
+  // }
+
+  for(auto itr = str_tree_vec.begin(); itr != str_tree_vec.end(); ++itr) {
+    std::cout << *itr << std::endl;
+  }
+
+  // for(auto itr=levels_vec.begin(); itr != levels_vec.end()-1; ++itr) {
+  //   std::cout << std::string(offset, ' ') << *itr << std::endl;
+  //   step = step+step/2;
+  //   offset -= step;
+  // }
+  // std::cout << *(levels_vec.end()-1) << std::endl; // the last element
 }
 
 
@@ -135,25 +182,38 @@ template <class K, class T>
 void BinarySearchTree<K,T>::_fill_levels(Vertex<K,T>* tree,
                                          int level, int pos,
                                          std::vector<int>&index_vec,
-                                         std::vector<std::string> &vec) {
+                                         std::vector<std::vector<std::string>> &vec) {
   // VLR: vertex, left, right
   if (tree != nullptr) {
 
 
     //V
     std::ostringstream oss;
-    oss << tree -> key << "=>" << tree -> element << std::string(SPACING, ' ');
+    oss << tree -> key << "=>" << tree -> element;
 
     if(level < (int)vec.size()) {
       int offset=0;
-
       offset = pos - index_vec[level] -1;
 
-      vec[level] += std::string(2*offset*SPACING, ' ') + oss.str();
+      // empty entries in this level
+      for(int i=0; i<offset; i++){
+        vec[level].push_back("[--]");
+      }
+      vec[level].push_back(oss.str());
+
       index_vec[level] = pos; // keeping track of last position
     }
     else {
-      vec.push_back(std::string(2*pos*SPACING, ' ') + oss.str());
+
+      // empty entries in this level
+      vec.push_back(std::vector<std::string>(pos, "[--]"));
+      if (!vec.empty()) {
+        vec[level].push_back(oss.str());
+      }
+      else {
+        vec.push_back(std::vector<std::string>(0, "[--]"));
+      }
+
       index_vec.push_back(pos);
     }
 
