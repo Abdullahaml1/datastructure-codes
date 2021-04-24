@@ -17,6 +17,13 @@ int main() {
   bst.insert(50,1);
   bst.insert(14,1);
 
+
+  bst.insert(100,1);
+
+  // bst.insert(200,1);
+
+
+
   bst.draw_tree();
   std::cout <<"size=" << bst.size() << std::endl;
   return 0;

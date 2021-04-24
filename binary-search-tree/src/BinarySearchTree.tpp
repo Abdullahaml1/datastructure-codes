@@ -1,5 +1,4 @@
-#define SPACING 2
-
+#define SPACING 8
 
 
 
@@ -33,6 +32,8 @@ void BinarySearchTree<K, T>::initialize() {
   _root_ptr = nullptr;
   _size_count = 0;
   _comp = nullptr;
+
+  _empty_str = "[" + std::string(SPACING -2, '-') + "]";
 }
 
 
@@ -108,7 +109,7 @@ std::string BinarySearchTree<K,T>::_draw_element(K key, T element) {
   int offset =0;
 
   oss << key << element;
-  offset = (SPACING - oss.str().size() - 4);
+  offset = (int)(SPACING - oss.str().size() - 4);
   oss.str("");
 
   oss << '[' << std::string(offset/2, ' ') << key << "=>"  << element;
@@ -125,35 +126,26 @@ void BinarySearchTree<K,T>::draw_tree() {
 
   std::vector<std::vector<std::string>> levels_vec;
   std::vector<int> index_vec;
-  // int offset =0, step =0;
 
   _fill_levels(_root_ptr, 0, 0, index_vec, levels_vec);
 
-  // if (! levels_vec.empty()) {
-  //   step = (int)levels_vec[0].size() /2;
-  // }
-  // offset = (int)std::pow(2, (float)levels_vec.size()-2) * SPACING * 2 -4;
-  // std::cout << "offset=" << offset << std::endl;
-  // std::cout << "step =" << step << std::endl;
 
 
   std::vector<std::string> str_tree_vec (levels_vec.size());
-  int max_level_count = (int)std::pow(2, (float)levels_vec.size());
   int level =(int)levels_vec.size()-1;
   int space =2;
   int offset=0;
-  int element_size=5;
+  int element_size=SPACING;
 
   for(auto itr=levels_vec.rbegin(); itr != levels_vec.rend(); ++itr) {
     str_tree_vec[level] = std::string(offset, ' ');
     for (auto level_itr=(*itr).begin(); level_itr != (*itr).end(); level_itr++) {
       str_tree_vec[level] += *level_itr + std::string(space, ' ');
     }
-    offset = (element_size + space)/2;
-    space = 2*element_size + space - offset;
+    offset += (element_size + space)/2; // old space
+    space = element_size + 2*space;
 
     level --;
-    max_level_count/=2;
   }
 
   // for(auto itr=levels_vec.begin(); itr != levels_vec.end(); itr++) {
@@ -164,16 +156,10 @@ void BinarySearchTree<K,T>::draw_tree() {
   // }
 
   for(auto itr = str_tree_vec.begin(); itr != str_tree_vec.end(); ++itr) {
-    std::cout << *itr << std::endl;
+    std::cout << *itr << std::endl << std::endl;
   }
-
-  // for(auto itr=levels_vec.begin(); itr != levels_vec.end()-1; ++itr) {
-  //   std::cout << std::string(offset, ' ') << *itr << std::endl;
-  //   step = step+step/2;
-  //   offset -= step;
-  // }
-  // std::cout << *(levels_vec.end()-1) << std::endl; // the last element
 }
+
 
 
 
@@ -188,8 +174,6 @@ void BinarySearchTree<K,T>::_fill_levels(Vertex<K,T>* tree,
 
 
     //V
-    std::ostringstream oss;
-    oss << tree -> key << "=>" << tree -> element;
 
     if(level < (int)vec.size()) {
       int offset=0;
@@ -197,21 +181,21 @@ void BinarySearchTree<K,T>::_fill_levels(Vertex<K,T>* tree,
 
       // empty entries in this level
       for(int i=0; i<offset; i++){
-        vec[level].push_back("[--]");
+        vec[level].push_back(_empty_str);
       }
-      vec[level].push_back(oss.str());
+      vec[level].push_back(_draw_element(tree ->key, tree -> element));
 
       index_vec[level] = pos; // keeping track of last position
     }
     else {
 
       // empty entries in this level
-      vec.push_back(std::vector<std::string>(pos, "[--]"));
+      vec.push_back(std::vector<std::string>(pos, _empty_str));
       if (!vec.empty()) {
-        vec[level].push_back(oss.str());
+        vec[level].push_back(_draw_element(tree -> key, tree -> element));
       }
       else {
-        vec.push_back(std::vector<std::string>(0, "[--]"));
+        vec.push_back(std::vector<std::string>(0, _empty_str));
       }
 
       index_vec.push_back(pos);

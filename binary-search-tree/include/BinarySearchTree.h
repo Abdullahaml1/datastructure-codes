@@ -53,6 +53,8 @@ private:
 
   size_t _size_count;
 
+  std::string _empty_str; // [----]
+
   int (*_comp)(K, K);
 
   void _fill_levels(Vertex<K,T>* tree,
@@ -62,7 +64,6 @@ private:
 
   std::string _draw_element(K key, T element);
 
-  std::string _dray_empty_element();
 };
 
 
