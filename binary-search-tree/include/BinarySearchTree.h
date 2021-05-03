@@ -33,7 +33,9 @@ public:
 
   int insert(K key, T element);
 
-  T search(K key);
+  int search(K key, T &return_element);
+
+  T get(K key);
 
   T &at(K key);
 
@@ -63,6 +65,8 @@ private:
                     std::vector<std::vector<std::string>> &vec);
 
   std::string _draw_element(K key, T element);
+
+  void _clean(Vertex<K,T> * tree);
 
 };
 

@@ -103,6 +103,209 @@ int BinarySearchTree<K,T>::insert(K key, T element) {
 
 
 
+
+template <class K, class T>
+int BinarySearchTree<K,T>::search(K key, T &return_element) {
+
+  Vertex<K,T>* itr = _root_ptr;
+
+  while(itr != nullptr) {
+
+    if (_comp(key, itr -> key) ==0) {
+      return_element = itr -> element;
+      return 0;
+    }
+
+    // bigger than -> walk right
+    else if (_comp(key, itr -> key) > 0) {
+      itr = itr -> right;
+    }
+    // equal -> walk left
+    else {
+      itr = itr -> left;
+    }
+  }
+
+  return -1; // not found
+}
+
+
+template <class K, class T>
+T BinarySearchTree<K,T>::get(K key) {
+
+  Vertex<K,T> * parent = nullptr;
+
+  // get the vertex and its parent
+  Vertex<K,T> * itr = _root_ptr;
+
+  while((itr != nullptr) && !(_comp(key, itr->key) ==0)) {
+    parent = itr;
+    // key > itr->key walk right
+    if (_comp(key, itr->key) > 0) {
+      itr = itr -> right;
+    }
+    // key < itr->key walk left
+    else {
+      itr = itr -> left;
+    }
+  }
+
+  // not found raise exipession
+  if (itr == nullptr) {
+    return 0;
+  }
+
+  /*
+   we have 4 cases:
+  vertex without children (leaf)
+       parent
+         /\
+      itr  null
+      /\
+   null null
+  */
+  T element;
+  if ((itr->left == nullptr) && (itr->right == nullptr)) {
+    if (itr == _root_ptr) { // the root
+      _root_ptr = nullptr;
+    }
+    else if (parent->left == itr) {
+      parent->left = nullptr;
+    }
+    // parent->right ==itr
+    else {
+      parent->right = nullptr;
+    }
+  }
+
+  /*
+  vertex with single left tree
+       parent
+         /\
+      itr  tree
+      /\
+   tree null
+  */
+  else if((itr->left != nullptr) && (itr->right ==nullptr)) {
+    if (itr == _root_ptr) { // the root
+      _root_ptr = itr->left;
+    }
+    else if (parent->left == itr) {
+      parent->left = itr->left;
+    }
+    // parent->right ==itr
+    else {
+      parent->right = itr->left;
+    }
+  }
+
+
+  /*
+  vertex with right  tree
+       parent
+         /\
+      itr  tree
+      /\
+   null tree
+  */
+  else if((itr->left == nullptr) && (itr->right !=nullptr)) {
+
+    if (itr == _root_ptr) { // parent == nullptr
+      _root_ptr = itr->right;
+    }
+    else if (parent->left == itr) {
+      parent->left = itr->right;
+    }
+    // parent->right ==itr
+    else {
+      parent->right = itr->right;
+    }
+  }
+
+
+  /*
+  vertex with tree in both branches
+       parent
+         /\
+      itr  tree
+      /\
+   tree tree
+  */
+  else if((itr->left != nullptr) && (itr->right !=nullptr)) {
+
+    // get the bigest vertex of the left tree
+    Vertex<K,T> * mean_vertex = itr->left, * mean_patent=nullptr;
+    while(mean_vertex->right != nullptr) {
+      mean_patent = mean_vertex;
+      mean_vertex = mean_vertex->right;
+    }
+    /*
+     mean node will be like this
+                itr
+                /\
+             tree tree
+              /\
+         tree    mean
+          /\      /\
+      tree tree tree null
+    */
+    //placing the parent of the mean_vertex
+    if (mean_patent != nullptr) {
+      mean_patent->right = mean_vertex->left;
+    }
+
+    //placing the mean_vertex in the position of the itr vertex
+    if (mean_patent != nullptr){
+      mean_vertex->left = itr->left;
+    }
+    mean_vertex->right = itr->right;
+
+    // placing the parent vertex of the itr vertex(to be deleted vertex) to
+    //mean_vertex
+    if (itr == _root_ptr) { // parent == nullptr
+      _root_ptr = mean_vertex;
+    }
+    else if (parent->left == itr) {
+      parent->left = mean_vertex;
+    }
+    // parent->right ==itr
+    else {
+      parent->right = mean_vertex;
+    }
+  }
+
+  element = itr -> element;
+  free(itr);
+  _size_count --;
+  return element;
+}
+
+
+template <class K, class T>
+T &BinarySearchTree<K,T>::at(K key) {
+
+  Vertex<K,T>* itr = _root_ptr;
+
+  while(itr != nullptr) {
+
+    if (_comp(key, itr -> key) ==0) {
+      return itr -> element;
+    }
+
+    // bigger than -> walk right
+    else if (_comp(key, itr -> key) > 0) {
+      itr = itr -> right;
+    }
+    // less than  -> walk left
+    else {
+      itr = itr -> left;
+    }
+  }
+}
+
+
+
+
 template <class K, class T>
 std::string BinarySearchTree<K,T>::_draw_element(K key, T element) {
   std::ostringstream oss;
@@ -215,9 +418,30 @@ void BinarySearchTree<K,T>::_fill_levels(Vertex<K,T>* tree,
 
 template <class K, class T>
 void BinarySearchTree<K,T>::clean(){
+  _clean(_root_ptr);
+  _root_ptr = nullptr;
+  _size_count =0;
+
 }
 
 
+
+
+template <class K, class T>
+void BinarySearchTree<K,T>::_clean(Vertex<K,T> * tree){
+  if (tree != nullptr) {
+    //left
+    _clean(tree -> left);
+
+    //vertex
+    Vertex<K,T> *right = tree -> right;
+
+    free(tree);
+
+    //right
+    _clean(right);
+  }
+}
 
 
 
