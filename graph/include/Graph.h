@@ -38,7 +38,6 @@ public:
   void traverse_indepth_v2(void (*func)(int i, int j, T element));
 
 
-  void traverse_indepth_v3(void (*func)(int i, int j, T element));
 
 private:
 
@@ -55,11 +54,6 @@ private:
                              std::vector<Node *> &visited);
 
 
-  // support bidirectional paths without repetaion to the same vertex
-  void _traverse_indepth_rec_v3(void (*func)(int i, int j, T element),
-                                int start_i,
-                                int last_i,
-                                std::vector<int> &visited);
 
   std::vector<Vertex<T> *> _vertices;
   int _n;

@@ -92,17 +92,15 @@ void Graph<T>::traverse_indepth(void (*func)(int i, int j, T element)) {
 
   // initialize visited with zeros
   std::vector<int> visited = std::vector<int>(_n, 0);
-  std::vector<int> other_visited = std::vector<int>(_n, 0);
 
   _traverse_indepth_rec(func, 0, visited);
 
-  // //isolated vertices
-  // visited = std::vector<int>(_n, 0);
-  // for (int i=0; i<_n; i++) {
-  //   if(!visited[i]) {
-  //     _traverse_indepth_rec(func, i, visited);
-  //   }
-  // }
+  //isolated vertices
+  for (int i=0; i<_n; i++) {
+    if(!visited[i]) {
+      _traverse_indepth_rec(func, i, visited);
+    }
+  }
 }
 
 
@@ -147,49 +145,6 @@ void Graph<T>::traverse_indepth_v2(void (*func)(int i, int j, T element)) {
   std::vector<Node *> visited = std::vector<Node *>(_n, nullptr);
 
   _traverse_indepth_rec_v2(func, 0, visited);
-
-  // //isolated vertices
-  // visited = std::vector<int>(_n, 0);
-  // for (int i=0; i<_n; i++) {
-  //   if(!visited[i]) {
-  //     _traverse_indepth_rec(func, i, visited);
-  //   }
-  // }
-}
-
-
-
-
-
-
-template <class T>
-void Graph<T>::_traverse_indepth_rec_v3(void (*func)(int i, int j, T element),
-                                        int start_i,
-                                        int last_i,
-                                        std::vector<int> &visited) {
-  if (_vertices[start_i]->start) {
-    if(last_i != _vertices[start_i]->start->index) {
-      func(start_i, _vertices[start_i]->start->index, _vertices[start_i]->element);
-    }
-  }
-  visited[start_i] = 1;
-
-  // looping throw Av adjacent to the vertex
-  for(Node *node = _vertices[start_i] -> start; node; node = node -> next) {
-    if (!visited[node->index]) {
-      _traverse_indepth_rec_v3(func, node->index, start_i, visited);
-    }
-  }
-}
-
-
-template <class T>
-void Graph<T>::traverse_indepth_v3(void (*func)(int i, int j, T element)) {
-
-  // initialize visited with zeros
-  std::vector<int> visited = std::vector<int>(_n, 0);
-
-  _traverse_indepth_rec_v3(func, 0, -1, visited);
 
   // //isolated vertices
   // visited = std::vector<int>(_n, 0);

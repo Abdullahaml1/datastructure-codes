@@ -26,7 +26,5 @@ int main() {
   std::cout << "---------------------------\n";
   g.traverse_indepth_v2(traverse_print);
 
-  std::cout << "---------------------------\n";
-  g.traverse_indepth_v3(traverse_print);
   return 0;
 }
